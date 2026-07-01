@@ -29,19 +29,19 @@ export default function PortalPage() {
           />
 
           {/* Center header */}
-          <div className="absolute top-0 left-0 right-0 z-20 flex flex-col items-center pt-10 sm:pt-16 px-4">
+          <div className="absolute top-0 left-0 right-0 z-20 flex flex-col items-center pt-6 sm:pt-16 px-4">
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="text-[10px] sm:text-xs font-semibold tracking-[0.35em] uppercase text-white/30 mb-4 sm:mb-6"
+              className="text-[9px] sm:text-xs font-semibold tracking-[0.3em] sm:tracking-[0.35em] uppercase text-white/30 mb-2 sm:mb-6"
             >
               Portfolio
             </motion.div>
 
             <motion.h1
-              className="text-center font-bold leading-tight mb-3 sm:mb-4"
-              style={{ fontSize: "clamp(1.75rem, 7vw, 4rem)", color: "rgba(240,244,255,0.95)" }}
+              className="text-center font-bold leading-tight mb-1.5 sm:mb-4"
+              style={{ fontSize: "clamp(1.375rem, 6vw, 4rem)", color: "rgba(240,244,255,0.95)" }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 1, ease: [0.16, 1, 0.3, 1] }}
@@ -61,7 +61,7 @@ export default function PortalPage() {
             </motion.h1>
 
             <motion.p
-              className="text-white/40 text-xs sm:text-sm md:text-base text-center max-w-[16rem] sm:max-w-sm"
+              className="hidden sm:block text-white/40 text-sm md:text-base text-center max-w-sm"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.7, duration: 0.8 }}
@@ -71,7 +71,7 @@ export default function PortalPage() {
 
             {/* Divider */}
             <motion.div
-              className="mt-5 sm:mt-8 w-px h-8 sm:h-12"
+              className="mt-2 sm:mt-8 w-px h-5 sm:h-12"
               style={{ background: "linear-gradient(to bottom, rgba(225,69,4,0.5), transparent)" }}
               initial={{ scaleY: 0, opacity: 0 }}
               animate={{ scaleY: 1, opacity: 1 }}
@@ -79,8 +79,8 @@ export default function PortalPage() {
             />
           </div>
 
-          {/* World split — fills the screen */}
-          <div className="absolute inset-0 z-10 flex flex-col md:flex-row pt-[19rem] sm:pt-[17rem] md:pt-0">
+          {/* World split — both options always side-by-side, fills the screen below the header */}
+          <div className="absolute inset-0 z-10 flex flex-row pt-36 sm:pt-56 md:pt-64">
             <WorldCard side="engineering" />
             <WorldCard side="explorer" />
           </div>

@@ -50,25 +50,34 @@ export function EngineeringHero() {
         />
       </div>
 
-      {/* ── Mobile-only portrait strip ──────────────────────────────── */}
-      <div className="md:hidden absolute inset-0">
-        <Image
-          src="/images/profile.jpg"
-          alt="Profile"
-          fill
-          priority
-          className="object-cover object-top opacity-25"
-          sizes="100vw"
-        />
-        <div
-          className="absolute inset-0"
-          style={{ background: "linear-gradient(180deg, #020812 0%, rgba(2,8,18,0.75) 35%, #020812 82%)" }}
-        />
-      </div>
-
       {/* ── Left text content ───────────────────────────────────────── */}
       <div className="relative z-20 w-full max-w-7xl mx-auto px-6 lg:px-12 py-20 sm:py-24 pt-28 sm:pt-32">
         <div className="max-w-xl">
+
+          {/* Mobile-only portrait photo */}
+          <motion.div
+            className="md:hidden relative w-32 h-40 rounded-2xl overflow-hidden mb-6"
+            style={{
+              border: "1px solid rgba(56,189,248,0.25)",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.5), 0 0 30px rgba(56,189,248,0.12)",
+            }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <Image
+              src="/images/profile.jpg"
+              alt="Profile"
+              fill
+              priority
+              className="object-cover object-top"
+              sizes="128px"
+            />
+            <div
+              className="absolute inset-0"
+              style={{ background: "linear-gradient(180deg, transparent 55%, rgba(2,8,18,0.5) 100%)" }}
+            />
+          </motion.div>
 
           {/* Status */}
           <motion.div

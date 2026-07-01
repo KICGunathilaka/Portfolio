@@ -50,7 +50,7 @@ export function WorldCard({ side }: WorldCardProps) {
   return (
     <motion.div
       ref={cardRef}
-      className="relative flex-1 min-h-screen flex flex-col items-center justify-center cursor-pointer overflow-hidden"
+      className="relative flex-1 h-full flex flex-col items-center justify-center cursor-pointer overflow-hidden"
       style={{ perspective: 1000 }}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
@@ -85,12 +85,12 @@ export function WorldCard({ side }: WorldCardProps) {
 
       {/* Card content */}
       <motion.div
-        className="relative z-10 flex flex-col items-center text-center px-6 sm:px-8 max-w-md"
+        className="relative z-10 flex flex-col items-center text-center px-3 sm:px-6 md:px-8 max-w-md"
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
       >
         {/* Icon */}
         <motion.div
-          className="mb-8 p-5 rounded-2xl"
+          className="mb-4 sm:mb-8 p-2.5 sm:p-5 rounded-xl sm:rounded-2xl"
           style={{
             background: isEng
               ? "rgba(56,189,248,0.08)"
@@ -106,14 +106,14 @@ export function WorldCard({ side }: WorldCardProps) {
           transition={{ duration: 0.3 }}
         >
           {isEng
-            ? <Server size={40} className="text-sky-400" />
-            : <Mountain size={40} className="text-orange-400" />
+            ? <Server className="w-6 h-6 sm:w-10 sm:h-10 text-sky-400" />
+            : <Mountain className="w-6 h-6 sm:w-10 sm:h-10 text-orange-400" />
           }
         </motion.div>
 
         {/* Label */}
         <motion.div
-          className="text-xs font-semibold tracking-[0.3em] uppercase mb-4"
+          className="text-[9px] sm:text-xs font-semibold tracking-[0.2em] sm:tracking-[0.3em] uppercase mb-2 sm:mb-4"
           style={{ color: isEng ? "rgba(56,189,248,0.7)" : "rgba(251,146,60,0.7)" }}
           animate={{ translateZ: isHovered ? 15 : 0 }}
         >
@@ -122,7 +122,7 @@ export function WorldCard({ side }: WorldCardProps) {
 
         {/* Title */}
         <motion.h2
-          className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
+          className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-2 sm:mb-6 leading-tight"
           animate={{ translateZ: isHovered ? 25 : 0 }}
         >
           {isEng ? "Systems\nEngineer" : "The\nExplorer"}
@@ -130,7 +130,7 @@ export function WorldCard({ side }: WorldCardProps) {
 
         {/* Subtitle */}
         <motion.p
-          className="text-white/50 text-base md:text-lg leading-relaxed mb-10 max-w-xs"
+          className="hidden sm:block text-white/50 text-base md:text-lg leading-relaxed mb-10 max-w-xs"
           animate={{ translateZ: isHovered ? 10 : 0, opacity: isHovered ? 0.85 : 0.5 }}
           transition={{ duration: 0.3 }}
         >
@@ -141,7 +141,7 @@ export function WorldCard({ side }: WorldCardProps) {
 
         {/* CTA Button */}
         <motion.button
-          className="group flex items-center gap-3 px-8 py-4 rounded-full font-semibold text-sm transition-all duration-300"
+          className="group flex items-center gap-1.5 sm:gap-3 px-4 py-2.5 sm:px-8 sm:py-4 rounded-full font-semibold text-xs sm:text-sm transition-all duration-300"
           style={{
             background: isEng
               ? "rgba(56,189,248,0.12)"
@@ -160,8 +160,9 @@ export function WorldCard({ side }: WorldCardProps) {
           }}
           whileTap={{ scale: 0.97 }}
         >
-          {isEng ? "Enter Engineering" : "Begin Adventure"}
-          <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+          <span className="sm:hidden">{isEng ? "Enter" : "Explore"}</span>
+          <span className="hidden sm:inline">{isEng ? "Enter Engineering" : "Begin Adventure"}</span>
+          <ArrowRight size={14} className="sm:w-4 sm:h-4 transition-transform group-hover:translate-x-1" />
         </motion.button>
       </motion.div>
     </motion.div>
