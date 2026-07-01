@@ -94,7 +94,7 @@ export function EngineeringHero() {
             transition={{ delay: 0.3, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           >
             <p className="text-white/40 text-sm mb-3 font-mono tracking-wider uppercase">
-              Hello, I'm
+              Hello, I&apos;m
             </p>
             <h1
               className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-4 leading-[1.05]"

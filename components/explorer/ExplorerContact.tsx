@@ -87,7 +87,7 @@ export function ExplorerContact() {
               className="py-4 px-6 rounded-2xl text-center"
               style={{ background: "rgba(52,211,153,0.06)", border: "1px solid rgba(52,211,153,0.2)" }}
             >
-              <p className="text-green-400 font-medium">You're in! ✅ See you on the trail.</p>
+              <p className="text-green-400 font-medium">You&apos;re in! ✅ See you on the trail.</p>
             </div>
           ) : (
             <form

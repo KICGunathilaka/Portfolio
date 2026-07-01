@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { GEAR_ITEMS, VISITED_COUNTRIES } from "@/lib/data/adventures";
-import { Globe, Package } from "lucide-react";
+import { Globe } from "lucide-react";
 
 export function GearSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -28,7 +28,7 @@ export function GearSection() {
                 My Gear
               </h2>
               <p className="text-orange-200/40">
-                Trusted equipment that's been through real expeditions.
+                Trusted equipment that&apos;s been through real expeditions.
               </p>
             </motion.div>
 

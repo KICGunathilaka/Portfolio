@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Server, Mountain, Home, Command, Menu, X } from "lucide-react";
+import { Server, Mountain, Home, Menu, X } from "lucide-react";
 
 const ENG_LINKS = [
   { label: "About", href: "#about" },

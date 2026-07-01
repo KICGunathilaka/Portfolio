@@ -33,10 +33,10 @@ export function EngContact() {
             Get in Touch
           </span>
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Let's Build Something
+            Let&apos;s Build Something
           </h2>
           <p className="text-white/40 text-lg max-w-xl mx-auto">
-            Whether it's a complex infrastructure challenge or a fresh AI project idea.
+            Whether it&apos;s a complex infrastructure challenge or a fresh AI project idea.
           </p>
         </motion.div>
 
@@ -114,7 +114,7 @@ export function EngContact() {
               >
                 <div className="text-5xl mb-4">✅</div>
                 <h3 className="text-white font-bold text-xl mb-2">Message Sent!</h3>
-                <p className="text-white/50 text-sm">I'll get back to you within 24 hours.</p>
+                <p className="text-white/50 text-sm">I&apos;ll get back to you within 24 hours.</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">

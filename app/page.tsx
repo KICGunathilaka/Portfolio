@@ -66,7 +66,7 @@ export default function PortalPage() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.7, duration: 0.8 }}
             >
-              Choose the side of me you'd like to discover.
+              Choose the side of me you&apos;d like to discover.
             </motion.p>
 
             {/* Divider */}
