@@ -1,0 +1,249 @@
+You are given a task to integrate an existing React component in the codebase
+
+The codebase should support:
+- shadcn project structure  
+- Tailwind CSS
+- Typescript
+
+If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+
+Determine the default path for components and styles. 
+If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+Copy-paste this component to /components/ui folder:
+```tsx
+liquid-glass-hero.tsx
+import { useEffect, useRef } from "react";
+import { Globe, Instagram, Twitter, ArrowRight } from "lucide-react";
+
+/* ---------------- Glass Style ---------------- */
+const glass =
+  "bg-white/10 backdrop-blur-xl border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.2)]";
+
+/* ---------------- Constants ---------------- */
+const VIDEO_URL =
+  "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260328_115001_bcdaa3b4-03de-47e7-ad63-ae3e392c32d4.mp4";
+
+const FADE_DURATION = 500;
+const FADE_OUT_BEFORE_END = 0.55;
+
+/* ---------------- Main Component ---------------- */
+const LiquidGlassHero = () => {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const rafRef = useRef<number | null>(null);
+  const fadingOutRef = useRef(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const cancelRaf = () => {
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+    };
+
+    const animateOpacity = (target: number, duration: number) => {
+      cancelRaf();
+      const start = performance.now();
+      const from = parseFloat(video.style.opacity || "0");
+
+      const step = (now: number) => {
+        const elapsed = now - start;
+        const t = Math.min(1, elapsed / duration);
+        video.style.opacity = String(from + (target - from) * t);
+
+        if (t < 1) rafRef.current = requestAnimationFrame(step);
+        else rafRef.current = null;
+      };
+
+      rafRef.current = requestAnimationFrame(step);
+    };
+
+    const fadeIn = () => {
+      fadingOutRef.current = false;
+      animateOpacity(1, FADE_DURATION);
+    };
+
+    const handleLoaded = () => {
+      video.style.opacity = "0";
+      video.play().catch(() => {});
+      fadeIn();
+    };
+
+    const handleTimeUpdate = () => {
+      if (fadingOutRef.current) return;
+      const remaining = video.duration - video.currentTime;
+
+      if (!isNaN(remaining) && remaining <= FADE_OUT_BEFORE_END) {
+        fadingOutRef.current = true;
+        animateOpacity(0, FADE_DURATION);
+      }
+    };
+
+    const handleEnded = () => {
+      cancelRaf();
+      video.style.opacity = "0";
+
+      setTimeout(() => {
+        video.currentTime = 0;
+        video.play().catch(() => {});
+        fadeIn();
+      }, 100);
+    };
+
+    video.style.opacity = "0";
+    video.addEventListener("loadeddata", handleLoaded);
+    video.addEventListener("timeupdate", handleTimeUpdate);
+    video.addEventListener("ended", handleEnded);
+
+    if (video.readyState >= 2) handleLoaded();
+
+    return () => {
+      cancelRaf();
+      video.removeEventListener("loadeddata", handleLoaded);
+      video.removeEventListener("timeupdate", handleTimeUpdate);
+      video.removeEventListener("ended", handleEnded);
+    };
+  }, []);
+
+  return (
+    <div className="relative w-full min-h-screen bg-black overflow-hidden flex flex-col">
+      
+      {/* Background Video */}
+      <video
+        ref={videoRef}
+        className="absolute inset-0 w-full h-full object-cover"
+        src={VIDEO_URL}
+        autoPlay
+        muted
+        playsInline
+        loop={false}
+        style={{ opacity: 0 }}
+      />
+
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/50" />
+
+      {/* Nav */}
+      <nav className="relative z-20 px-4 sm:px-6 md:px-10 py-6 w-full">
+        <div className="w-full max-w-7xl mx-auto flex items-center justify-between">
+          
+          <div className="flex items-center gap-2 text-white font-semibold text-lg">
+            <Globe size={22} />
+            <span>Asme</span>
+          </div>
+
+          <div className="hidden md:flex items-center gap-8">
+            {["Features", "Pricing", "About"].map((l) => (
+              <a
+                key={l}
+                href="#"
+                className="text-white/80 hover:text-white transition text-sm font-medium"
+              >
+                {l}
+              </a>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button className="hidden sm:block text-white text-sm font-medium">
+              Sign Up
+            </button>
+
+            <button className={`${glass} rounded-full px-5 py-2 text-white text-sm`}>
+              Login
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero */}
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 sm:px-6 text-center">
+        
+        {/* Heading */}
+        <h1
+          className="text-white mb-6 tracking-tight leading-[1.1]
+          text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl"
+          style={{ fontFamily: "'Instrument Serif', serif" }}
+        >
+          Built for the curious
+        </h1>
+
+        <div className="w-full max-w-xl space-y-4">
+          
+          {/* Email */}
+          <form
+            onSubmit={(e) => e.preventDefault()}
+            className={`${glass} rounded-full pl-4 pr-2 py-2 flex items-center gap-2 sm:gap-3`}
+          >
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className="flex-1 bg-transparent outline-none border-none text-white placeholder:text-white/50 text-sm sm:text-base"
+            />
+
+            <button className="bg-white rounded-full p-2 sm:p-3 text-black hover:scale-105 transition">
+              <ArrowRight size={18} />
+            </button>
+          </form>
+
+          <p className="text-white/70 text-sm sm:text-base leading-relaxed px-2">
+            Stay updated with the latest news and insights. Subscribe to our newsletter today and never miss out.
+          </p>
+
+          <div className="flex justify-center">
+            <button className={`${glass} rounded-full px-6 py-2.5 text-white text-sm`}>
+              Manifesto
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer Icons */}
+      <div className="relative z-10 flex justify-center gap-4 pb-10 sm:pb-12">
+        {[Instagram, Twitter, Globe].map((Icon, i) => (
+          <button
+            key={i}
+            className={`${glass} rounded-full p-3 sm:p-4 text-white hover:bg-white/15 transition`}
+          >
+            <Icon size={18} />
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export { LiquidGlassHero };
+
+demo.tsx
+import { LiquidGlassHero } from "@/components/ui/liquid-glass-hero";
+
+export default function DemoOne() {
+  return <LiquidGlassHero />;
+}
+
+```
+
+Install NPM dependencies:
+```bash
+lucide-react
+```
+
+Implementation Guidelines
+ 1. Analyze the component structure and identify all required dependencies
+ 2. Review the component's argumens and state
+ 3. Identify any required context providers or hooks and install them
+ 4. Questions to Ask
+ - What data/props will be passed to this component?
+ - Are there any specific state management requirements?
+ - Are there any required assets (images, icons, etc.)?
+ - What is the expected responsive behavior?
+ - What is the best place to use this component in the app?
+
+Steps to integrate
+ 0. Copy paste all the code above in the correct directories
+ 1. Install external dependencies
+ 2. Fill image assets with Unsplash stock images you know exist
+ 3. Use lucide-react icons for svgs or logos if component requires them
