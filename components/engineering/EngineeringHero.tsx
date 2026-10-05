@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { siGithub } from "simple-icons";
 import { ScrambleText } from "@/components/shared/ScrambleText";
 import { TerminalLaptop } from "./TerminalLaptop";
 
 const PAPER_URL = "https://ieeexplore.ieee.org/document/10963195";
+const GITHUB_URL = "https://github.com/KICGunathilaka";
 
 const ROLES = [
   "Systems Engineer",
@@ -70,6 +72,19 @@ export function EngineeringHero() {
                 <span className="text-neutral-500">01</span> Engineering
                 <span className="block text-neutral-500">Sri Lanka</span>
               </p>
+
+              {/* Phones: GitHub profile, at the far end of the row */}
+              <a
+                href={GITHUB_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Isuru's GitHub profile"
+                className="ml-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-neutral-700 text-neutral-100 transition-colors hover:border-accent hover:text-white lg:hidden"
+              >
+                <svg viewBox="0 0 24 24" className="h-6 w-6" fill="currentColor" aria-hidden>
+                  <path d={siGithub.path} />
+                </svg>
+              </a>
             </motion.div>
 
             <h1 className="mt-6 font-display font-black uppercase leading-[0.9] text-[13vw] lg:mt-8 lg:text-[min(7.3vw,7.5rem)]">
