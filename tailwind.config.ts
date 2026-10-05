@@ -26,8 +26,8 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
-        display: ["var(--font-cal-sans)", "var(--font-inter)", "sans-serif"],
+        sans: ["var(--font-jetbrains)", "monospace"],
+        display: ["var(--font-doto)", "var(--font-jetbrains)", "monospace"],
         mono: ["var(--font-jetbrains)", "monospace"],
       },
       animation: {
@@ -39,8 +39,18 @@ const config: Config = {
         "spin-slow": "spin 20s linear infinite",
         "shimmer": "shimmer 2s infinite",
         "particle-float": "particleFloat 8s ease-in-out infinite",
+        "drift": "drift 26s ease-in-out infinite alternate",
+        "blink": "blink 1s steps(1) infinite",
       },
       keyframes: {
+        drift: {
+          from: { transform: "scale(1) translate3d(0, 0, 0)" },
+          to: { transform: "scale(1.08) translate3d(-1.5%, -1%, 0)" },
+        },
+        blink: {
+          "0%, 49%": { opacity: "1" },
+          "50%, 100%": { opacity: "0" },
+        },
         aurora: {
           "0%, 100%": { backgroundPosition: "0% 50%" },
           "50%": { backgroundPosition: "100% 50%" },

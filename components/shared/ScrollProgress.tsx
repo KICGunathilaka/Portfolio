@@ -30,11 +30,7 @@ export function ScrollProgress({ color = "#E14504" }: { color?: string }) {
     <div className="fixed top-0 left-0 right-0 h-[2px] z-[100] bg-white/5">
       <motion.div
         className="h-full origin-left"
-        style={{
-          width: smoothWidth,
-          background: `linear-gradient(90deg, ${color}, ${color}88)`,
-          boxShadow: `0 0 8px ${color}80`,
-        }}
+        style={{ width: smoothWidth, background: color }}
       />
     </div>
   );

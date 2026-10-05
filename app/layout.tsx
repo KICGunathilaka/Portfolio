@@ -1,12 +1,20 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Doto, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { CustomCursor } from "@/components/shared/CustomCursor";
 import { SmoothScrollProvider } from "@/components/shared/SmoothScrollProvider";
 
-const inter = Inter({
+// The site uses two typefaces only: Doto (dot-matrix display) and JetBrains Mono (everything else)
+const doto = Doto({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-doto",
+  axes: ["ROND"],
+  display: "swap",
+});
+
+const jetbrains = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains",
   display: "swap",
 });
 
@@ -28,7 +36,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.variable} font-sans antialiased`}>
+      <body className={`${doto.variable} ${jetbrains.variable} font-sans antialiased`}>
         <SmoothScrollProvider>
           <CustomCursor />
           {children}

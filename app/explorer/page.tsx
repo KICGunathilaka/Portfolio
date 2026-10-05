@@ -1,5 +1,6 @@
 import { GlassNav } from "@/components/shared/GlassNav";
 import { ScrollProgress } from "@/components/shared/ScrollProgress";
+import { GlitchIn } from "@/components/shared/GlitchIn";
 import { WorldSwitcher } from "@/components/shared/WorldSwitcher";
 import { ExplorerHero } from "@/components/explorer/ExplorerHero";
 import { HikingAdventures } from "@/components/explorer/HikingAdventures";
@@ -17,16 +18,24 @@ export const metadata: Metadata = {
 export default function ExplorerPage() {
   return (
     <div
-      className="min-h-screen"
+      className="min-h-screen overflow-x-clip"
       style={{ background: "#080504", color: "#F5EDD8" }}
     >
       <GlassNav />
       <ScrollProgress color="#FB923C" />
       <ExplorerHero />
-      <HikingAdventures />
-      <PhotoGallery />
-      <GearSection />
-      <ExplorerContact />
+      <GlitchIn>
+        <HikingAdventures />
+      </GlitchIn>
+      <GlitchIn>
+        <PhotoGallery />
+      </GlitchIn>
+      <GlitchIn>
+        <GearSection />
+      </GlitchIn>
+      <GlitchIn>
+        <ExplorerContact />
+      </GlitchIn>
       <WorldSwitcher />
 
       {/* Footer */}

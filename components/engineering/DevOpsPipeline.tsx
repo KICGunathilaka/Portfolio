@@ -1,233 +1,209 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
-import { PIPELINE_STAGES, PipelineStage } from "@/lib/data/pipeline";
+import { useEffect, useRef, useState } from "react";
+import { motion, useInView } from "framer-motion";
+import { PIPELINE_STAGES } from "@/lib/data/pipeline";
+import { ScrambleText } from "@/components/shared/ScrambleText";
+import { DotLogo } from "@/components/shared/DotLogo";
+import { RequestFlow } from "./RequestFlow";
+
+const STAGES = PIPELINE_STAGES.length;
+const STEP_MS = 1500;
+// Ticks the finished run stays on screen before the next one starts
+const LIVE_TICKS = 3;
+const pad = (n: number) => String(n).padStart(2, "0");
+
+const dots = (color: string, vertical = false) => ({
+  backgroundImage: `radial-gradient(circle, ${color} 1.5px, transparent 1.6px)`,
+  backgroundSize: vertical ? "3px 12px" : "12px 3px",
+  backgroundRepeat: vertical ? "repeat-y" : "repeat-x",
+});
 
 export function DevOpsPipeline() {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [selected, setSelected] = useState<PipelineStage | null>(null);
+  const inView = useInView(ref, { once: true, margin: "-120px" });
+  const onScreen = useInView(ref);
+
+  // One release travelling down the pipeline, over and over
+  const [tick, setTick] = useState(0);
+  useEffect(() => {
+    if (!onScreen) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setTick(STAGES);
+      return;
+    }
+    const interval = setInterval(() => setTick((t) => (t >= STAGES + LIVE_TICKS - 1 ? 0 : t + 1)), STEP_MS);
+    return () => clearInterval(interval);
+  }, [onScreen]);
+
+  // The stage being worked on; equal to STAGES once the release is live
+  const step = Math.min(tick, STAGES);
+  const live = step === STAGES;
+  const current = PIPELINE_STAGES[step];
+  const status = live ? "release is live" : `${current.tool.toLowerCase()}: ${current.verb.toLowerCase()}`;
+
+  const stateOf = (i: number) => (i < step ? "done" : i === step ? "active" : "pending");
+  const ring = { done: "border-neutral-300", active: "border-accent", pending: "border-neutral-800" };
+  const ink = { done: "text-white", active: "text-white", pending: "text-neutral-600" };
 
   return (
-    <section
-      id="devops"
-      className="py-20 sm:py-28 md:py-32 relative overflow-hidden"
-      style={{
-        background: "linear-gradient(180deg, #050D1A 0%, #020812 50%, #050D1A 100%)",
-      }}
-    >
-      <div className="max-w-7xl mx-auto px-6" ref={ref}>
-        {/* Header */}
-        <motion.div
-          className="mb-16 text-center"
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-        >
-          <span className="text-xs font-semibold tracking-[0.3em] uppercase text-[#E14504] mb-3 block">
-            How I Ship
-          </span>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            CI/CD Pipeline
-          </h2>
-          <p className="text-white/40 text-lg max-w-xl mx-auto">
-            Click any stage to explore the tools, decisions, and lessons learned.
+    <section id="devops" className="border-t border-neutral-800 bg-[#0A0A0A] text-white">
+      <div ref={ref} className="mx-auto max-w-[1600px] px-4 py-20 sm:px-8 lg:px-10 lg:py-24">
+        <div className="flex flex-wrap items-end justify-between gap-x-16 gap-y-6">
+          <div>
+            <p className="flex items-center gap-2.5 font-mono text-xs text-neutral-400">
+              <span className="block h-2 w-2 rounded-full bg-accent" />
+              <span className="text-neutral-500">04</span>
+              DevOps
+            </p>
+            <h2 className="mt-5 font-display font-black uppercase leading-[0.9] text-[13vw] lg:text-[min(7.3vw,7.5rem)]">
+              {inView ? <ScrambleText text="Pipeline" duration={600} /> : <span className="invisible">Pipeline</span>}
+            </h2>
+          </div>
+          <p className="max-w-md pb-2 font-mono text-sm leading-relaxed text-neutral-400">
+            The CI/CD I built end to end for the BloomAudit application: the route a change takes from a
+            commit to production.
           </p>
-        </motion.div>
-
-        {/* Pipeline grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-3">
-          {PIPELINE_STAGES.map((stage, i) => (
-            <PipelineNode
-              key={stage.id}
-              stage={stage}
-              index={i}
-              isInView={isInView}
-              onClick={() => setSelected(stage)}
-            />
-          ))}
         </div>
 
-        {/* Visual connector hint */}
         <motion.div
-          className="mt-8 text-center"
           initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ delay: 1.5, duration: 0.6 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ delay: 0.2, duration: 0.8 }}
         >
-          <p className="text-white/20 text-sm">
-            ↑ Click any stage to see details, tools, and learnings
-          </p>
-        </motion.div>
-      </div>
-
-      {/* Detail modal */}
-      <AnimatePresence>
-        {selected && (
-          <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setSelected(null)}
-          >
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-            <motion.div
-              className="relative w-full max-w-lg rounded-3xl p-8 overflow-hidden"
-              style={{
-                background: "#050D1A",
-                border: `1px solid ${selected.color}30`,
-                boxShadow: `0 0 60px ${selected.color}20, 0 40px 80px rgba(0,0,0,0.6)`,
-              }}
-              initial={{ scale: 0.9, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Glow */}
-              <div
-                className="absolute top-0 left-0 right-0 h-px"
-                style={{ background: `linear-gradient(90deg, transparent, ${selected.color}, transparent)` }}
-              />
-
-              {/* Close */}
-              <button
-                onClick={() => setSelected(null)}
-                className="absolute top-5 right-5 p-2 rounded-lg text-white/40 hover:text-white hover:bg-white/5 transition-all"
-              >
-                <X size={18} />
-              </button>
-
-              {/* Icon */}
-              <div
-                className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-6"
-                style={{
-                  background: `${selected.color}15`,
-                  border: `1px solid ${selected.color}30`,
-                }}
-              >
-                {selected.icon}
-              </div>
-
-              {/* Content */}
-              <h3 className="text-2xl font-bold text-white mb-2">{selected.label}</h3>
-              <p className="text-white/50 text-sm leading-relaxed mb-6">{selected.description}</p>
-
-              {/* Metrics */}
-              {selected.metrics && (
-                <div
-                  className="mb-6 px-4 py-3 rounded-xl"
-                  style={{ background: `${selected.color}10`, border: `1px solid ${selected.color}25` }}
-                >
-                  <p className="text-sm font-mono" style={{ color: selected.color }}>
-                    📊 {selected.metrics}
-                  </p>
-                </div>
+          {/* Run status */}
+          <div className="mt-10 flex items-center justify-between gap-4 border-y border-neutral-800 py-3 font-mono text-xs lg:mt-12">
+            <p className="flex min-w-0 items-center gap-3 text-neutral-200">
+              <span className="text-accent">&gt;</span>
+              <ScrambleText text={status} duration={350} />
+            </p>
+            <p className="flex shrink-0 items-center gap-2 text-neutral-500">
+              {live ? (
+                <>
+                  <span className="h-1.5 w-1.5 rounded-full bg-accent motion-safe:animate-blink" />
+                  <span className="text-neutral-200">Live</span>
+                </>
+              ) : (
+                <>
+                  <span className="hidden sm:inline">Simulated run ·</span>
+                  <span>
+                    <span className="text-accent">{pad(step + 1)}</span> / {pad(STAGES)}
+                  </span>
+                </>
               )}
+            </p>
+          </div>
 
-              {/* Details */}
-              <div className="space-y-2 mb-6">
-                {selected.details.map((detail, i) => (
-                  <div key={i} className="flex items-start gap-3">
-                    <div
-                      className="w-1.5 h-1.5 rounded-full mt-2 shrink-0"
-                      style={{ background: selected.color }}
-                    />
-                    <p className="text-white/60 text-sm leading-relaxed">{detail}</p>
+          {/* Wide screens: stations left to right */}
+          <ol className="mt-12 hidden grid-cols-7 lg:grid">
+            {PIPELINE_STAGES.map((stage, i) => {
+              const state = stateOf(i);
+              return (
+                <li key={stage.id} className="relative px-2 text-center">
+                  {/* Line to the next station, with the release travelling along it */}
+                  {i < STAGES - 1 && (
+                    <div className="absolute left-1/2 top-16 h-[3px] w-full -translate-y-1/2">
+                      <div
+                        className="absolute inset-0 transition-opacity duration-500"
+                        style={dots(i < step ? "#e5e5e5" : "#404040")}
+                      />
+                      {i === step - 1 && !live && (
+                        <span
+                          key={tick}
+                          className="pipeline-packet absolute top-1/2 -ml-1.5 -mt-1.5 h-3 w-3 rounded-full bg-accent"
+                        />
+                      )}
+                    </div>
+                  )}
+
+                  <div
+                    className={`relative z-10 mx-auto flex h-32 w-32 items-center justify-center rounded-full border bg-[#0A0A0A] transition-colors duration-300 ${ring[state]} ${ink[state]}`}
+                  >
+                    <DotLogo path={stage.logo} mark={stage.mark} className="h-16 w-16 text-[13px]" />
+                    {state === "active" && (
+                      <span className="absolute right-2.5 top-2.5 h-3 w-3 rounded-full border-2 border-[#0A0A0A] bg-accent motion-safe:animate-blink" />
+                    )}
                   </div>
-                ))}
-              </div>
 
-              {/* Tools */}
-              <div>
-                <p className="text-white/30 text-xs uppercase tracking-widest mb-3">Tools</p>
-                <div className="flex flex-wrap gap-2">
-                  {selected.tools.map((tool) => (
-                    <span
-                      key={tool}
-                      className="px-3 py-1 rounded-lg text-xs font-medium"
-                      style={{
-                        background: `${selected.color}12`,
-                        border: `1px solid ${selected.color}25`,
-                        color: selected.color,
-                      }}
-                    >
-                      {tool}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </section>
-  );
-}
+                  <p className="mt-7 font-mono text-[10px] text-neutral-600">{pad(i + 1)}</p>
+                  <p
+                    className={`mt-1 font-display text-2xl font-black uppercase leading-none transition-colors duration-300 xl:text-4xl ${
+                      state === "pending" ? "text-neutral-600" : "text-white"
+                    }`}
+                  >
+                    {stage.verb}
+                  </p>
+                  <p
+                    className={`mt-2 font-mono text-xs uppercase tracking-[0.08em] transition-colors duration-300 ${
+                      state === "active" ? "text-accent" : "text-neutral-400"
+                    }`}
+                  >
+                    {stage.tool}
+                  </p>
+                </li>
+              );
+            })}
+          </ol>
 
-function PipelineNode({
-  stage,
-  index,
-  isInView,
-  onClick,
-}: {
-  stage: PipelineStage;
-  index: number;
-  isInView: boolean;
-  onClick: () => void;
-}) {
-  const [hovered, setHovered] = useState(false);
+          {/* Wide screens: what serves a visitor once the release is live */}
+          <div className="mt-16 hidden lg:block">
+            <p className="flex items-center justify-between border-b border-neutral-800 pb-3 font-mono text-xs text-neutral-500">
+              <span className="uppercase tracking-[0.12em]">Request path</span>
+              <span className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                live traffic
+              </span>
+            </p>
+            <div className="mt-8">
+              <RequestFlow />
+            </div>
+          </div>
 
-  return (
-    <motion.button
-      className="relative flex flex-col items-center p-4 rounded-2xl text-center group cursor-pointer"
-      style={{
-        background: hovered ? `${stage.color}10` : "rgba(255,255,255,0.02)",
-        border: `1px solid ${hovered ? `${stage.color}40` : "rgba(255,255,255,0.06)"}`,
-        boxShadow: hovered ? `0 0 30px ${stage.color}20` : "none",
-        transition: "all 0.3s ease",
-      }}
-      initial={{ opacity: 0, y: 20, scale: 0.9 }}
-      animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-      transition={{ delay: index * 0.06, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onClick={onClick}
-      whileHover={{ y: -3 }}
-      whileTap={{ scale: 0.97 }}
-    >
-      {/* Stage number */}
-      <div
-        className="absolute -top-2 -right-2 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold"
-        style={{ background: stage.color, color: "white" }}
-      >
-        {index + 1}
-      </div>
-
-      {/* Icon */}
-      <div className="text-3xl mb-3">{stage.icon}</div>
-
-      {/* Label */}
-      <p className="text-white/70 text-xs font-medium leading-tight">{stage.label}</p>
-
-      {/* Hover hint */}
-      {hovered && (
-        <motion.div
-          className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap text-xs px-2 py-1 rounded"
-          initial={{ opacity: 0, y: -5 }}
-          animate={{ opacity: 1, y: 0 }}
-          style={{
-            background: `${stage.color}20`,
-            border: `1px solid ${stage.color}30`,
-            color: stage.color,
-          }}
-        >
-          Click to explore
+          {/* Narrow screens: stations top to bottom */}
+          <ol className="mt-10 lg:hidden">
+            {PIPELINE_STAGES.map((stage, i) => {
+              const state = stateOf(i);
+              return (
+                <li key={stage.id} className="relative flex gap-5 pb-8 last:pb-0">
+                  {i < STAGES - 1 && (
+                    <div
+                      className="absolute bottom-0 left-[26.5px] top-14 w-[3px]"
+                      style={dots(i < step ? "#e5e5e5" : "#404040", true)}
+                    />
+                  )}
+                  <div
+                    className={`relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-full border bg-[#0A0A0A] transition-colors duration-300 ${ring[state]} ${ink[state]}`}
+                  >
+                    <DotLogo path={stage.logo} mark={stage.mark} className="h-7 w-7 text-[6.5px]" />
+                    {state === "active" && (
+                      <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full border-2 border-[#0A0A0A] bg-accent motion-safe:animate-blink" />
+                    )}
+                  </div>
+                  <div className="pt-1">
+                    <p className="flex items-baseline gap-3">
+                      <span
+                        className={`font-display text-2xl font-black uppercase leading-none transition-colors duration-300 ${
+                          state === "pending" ? "text-neutral-600" : "text-white"
+                        }`}
+                      >
+                        {stage.verb}
+                      </span>
+                      <span
+                        className={`font-mono text-xs uppercase tracking-[0.08em] transition-colors duration-300 ${
+                          state === "active" ? "text-accent" : "text-neutral-400"
+                        }`}
+                      >
+                        {stage.tool}
+                      </span>
+                    </p>
+                    <p className="mt-2 font-mono text-[11px] leading-relaxed text-neutral-500">{stage.detail}</p>
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
         </motion.div>
-      )}
-    </motion.button>
+      </div>
+    </section>
   );
 }

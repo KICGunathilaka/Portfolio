@@ -28,10 +28,289 @@ html {
 body {
   background: var(--primary-dark);
   color: var(--text-primary);
-  font-family: var(--font-inter), system-ui, sans-serif;
+  font-family: var(--font-jetbrains), monospace;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Round dots on the dot-matrix display face */
+.font-display {
+  font-variation-settings: "ROND" 100;
+}
+
+/* Dotted seam between the two portal panels: a fixed column of dots with a light sweeping down it */
+.seam-dots,
+.seam-light {
+  background-size: 3px 12px;
+  background-repeat: repeat-y;
+}
+.seam-dots {
+  background-image: radial-gradient(circle, #525252 1.5px, transparent 1.6px);
+}
+.seam-light {
+  background-image: radial-gradient(circle, var(--accent) 1.5px, transparent 1.6px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 60%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 60%, transparent);
+  -webkit-mask-size: 100% 144px;
+  mask-size: 100% 144px;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: 0 -144px;
+  mask-position: 0 -144px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .seam-light {
+    animation: seam-sweep 6s linear infinite;
+  }
+}
+@keyframes seam-sweep {
+  from {
+    -webkit-mask-position: 0 -144px;
+    mask-position: 0 -144px;
+  }
+  to {
+    -webkit-mask-position: 0 calc(100% + 144px);
+    mask-position: 0 calc(100% + 144px);
+  }
+}
+
+/* Horizontal seam, used when the panels are stacked on phones */
+.seam-dots.seam-horizontal,
+.seam-light.seam-horizontal {
+  background-size: 12px 3px;
+  background-repeat: repeat-x;
+}
+.seam-light.seam-horizontal {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 60%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 60%, transparent);
+  -webkit-mask-size: 144px 100%;
+  mask-size: 144px 100%;
+  -webkit-mask-position: -144px 0;
+  mask-position: -144px 0;
+  animation-name: seam-sweep-x;
+}
+@keyframes seam-sweep-x {
+  from {
+    -webkit-mask-position: -144px 0;
+    mask-position: -144px 0;
+  }
+  to {
+    -webkit-mask-position: calc(100% + 144px) 0;
+    mask-position: calc(100% + 144px) 0;
+  }
+}
+
+/* Hero laptop: tears apart when its terminal session is "infected", drops out, then glitches back in */
+.laptop-glitch {
+  animation: laptop-glitch 0.42s steps(1) infinite;
+  filter: drop-shadow(3px 0 0 rgba(225, 69, 4, 0.75)) drop-shadow(-3px 0 0 rgba(255, 255, 255, 0.3));
+}
+.laptop-off {
+  animation: laptop-off 0.16s ease-in forwards;
+}
+.laptop-boot {
+  animation: laptop-glitch 0.3s steps(1) 1 reverse;
+}
+@keyframes laptop-glitch {
+  0% { transform: none; clip-path: inset(0); }
+  8% { transform: translate(-7px, 2px) skewX(-5deg); clip-path: inset(10% 0 60% 0); }
+  16% { transform: translate(6px, -1px); clip-path: inset(64% 0 6% 0); }
+  24% { transform: translate(-3px, 0) skewX(3deg); clip-path: inset(0); }
+  36% { transform: translate(10px, 1px); clip-path: inset(38% 0 36% 0); }
+  44% { transform: translate(-2px, -2px); clip-path: inset(0); opacity: 0.55; }
+  56% { transform: translate(7px, 0) skewX(8deg); clip-path: inset(4% 0 82% 0); opacity: 1; }
+  64% { transform: none; clip-path: inset(0); }
+  76% { transform: translate(-11px, 2px) skewX(-7deg); clip-path: inset(72% 0 4% 0); }
+  84% { transform: translate(4px, 0); clip-path: inset(0); opacity: 0.7; }
+  92% { transform: translate(-5px, -1px); clip-path: inset(24% 0 50% 0); opacity: 1; }
+  100% { transform: none; clip-path: inset(0); }
+}
+@keyframes laptop-off {
+  0% { transform: none; opacity: 1; }
+  70% { transform: scaleY(0.012); opacity: 1; filter: brightness(3); }
+  100% { transform: scale(0, 0.012); opacity: 0; }
+}
+
+/* Page sections glitch into view on scroll (see GlitchIn) */
+.section-glitch-in {
+  position: relative;
+  animation: section-glitch 0.9s steps(1) both;
+}
+/* Noise bars thrown across the section while it tears */
+.section-glitch-in::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  background-repeat: no-repeat;
+  background-image: linear-gradient(#e14504, #e14504), linear-gradient(#f5f5f5, #f5f5f5),
+    linear-gradient(#f5f5f5, #f5f5f5), linear-gradient(#e14504, #e14504);
+  animation: section-glitch-bars 0.9s steps(1) both;
+}
+@keyframes section-glitch {
+  0% { opacity: 0; }
+  4% {
+    opacity: 1;
+    clip-path: inset(4% 0 84% 0);
+    transform: translate(-46px, 0) skewX(-14deg);
+    filter: drop-shadow(9px 0 0 rgba(225, 69, 4, 0.9)) drop-shadow(-9px 0 0 rgba(255, 255, 255, 0.4));
+  }
+  9% { clip-path: inset(58% 0 20% 0); transform: translate(38px, 0) skewX(9deg); }
+  14% { opacity: 0; }
+  18% { opacity: 1; clip-path: inset(22% 0 52% 0); transform: translate(-24px, 6px) scaleY(1.5); }
+  23% {
+    clip-path: inset(0);
+    transform: translate(12px, 0);
+    filter: invert(1) hue-rotate(180deg);
+    opacity: 0.85;
+  }
+  27% {
+    clip-path: inset(76% 0 2% 0);
+    transform: translate(-58px, 0) skewX(-18deg);
+    filter: drop-shadow(12px 0 0 rgba(225, 69, 4, 0.9)) drop-shadow(-12px 0 0 rgba(255, 255, 255, 0.4));
+    opacity: 1;
+  }
+  32% { clip-path: inset(0 0 66% 0); transform: translate(30px, -4px); }
+  37% { opacity: 0; }
+  41% { opacity: 1; clip-path: inset(34% 0 34% 0); transform: translate(-18px, 0) skewX(7deg) scaleX(1.06); }
+  46% { clip-path: inset(0); transform: translate(8px, 0); opacity: 0.5; }
+  51% { clip-path: inset(48% 0 38% 0); transform: translate(52px, 0) skewX(16deg); opacity: 1; }
+  56% { clip-path: inset(8% 0 70% 0); transform: translate(-34px, 3px); }
+  61% {
+    clip-path: inset(0);
+    transform: translate(-6px, 0) scaleY(1.02);
+    filter: invert(1) hue-rotate(180deg);
+    opacity: 0.7;
+  }
+  65% {
+    clip-path: inset(62% 0 12% 0);
+    transform: translate(26px, 0) skewX(-10deg);
+    filter: drop-shadow(7px 0 0 rgba(225, 69, 4, 0.9)) drop-shadow(-7px 0 0 rgba(255, 255, 255, 0.4));
+    opacity: 1;
+  }
+  71% { clip-path: inset(0); transform: translate(-10px, 0); opacity: 0.8; }
+  77% { clip-path: inset(18% 0 58% 0); transform: translate(18px, 0) skewX(5deg); opacity: 1; }
+  83% { clip-path: inset(0); transform: translate(5px, 0); }
+  88% { clip-path: inset(84% 0 0 0); transform: translate(-14px, 0); }
+  93% { clip-path: inset(0); transform: translate(-2px, 0); filter: none; }
+  100% { opacity: 1; clip-path: inset(0); transform: none; filter: none; }
+}
+@keyframes section-glitch-bars {
+  0% { opacity: 0; }
+  4% {
+    opacity: 1;
+    background-size: 55% 10px, 30% 4px, 85% 2px, 18% 26px;
+    background-position: 10% 12%, 80% 34%, 0 61%, 92% 78%;
+  }
+  14% { opacity: 0; }
+  18% {
+    opacity: 1;
+    background-size: 70% 3px, 22% 18px, 40% 6px, 100% 2px;
+    background-position: 60% 8%, 5% 47%, 100% 70%, 0 90%;
+  }
+  27% {
+    background-size: 28% 34px, 90% 2px, 16% 8px, 46% 5px;
+    background-position: 0 28%, 0 52%, 74% 15%, 40% 84%;
+  }
+  37% { opacity: 0; }
+  41% {
+    opacity: 1;
+    background-size: 100% 2px, 12% 40px, 64% 4px, 34% 12px;
+    background-position: 0 40%, 88% 20%, 18% 66%, 4% 94%;
+  }
+  51% {
+    background-size: 38% 7px, 76% 2px, 9% 22px, 58% 3px;
+    background-position: 96% 6%, 12% 31%, 50% 58%, 70% 82%;
+  }
+  61% { opacity: 0.6; background-position: 20% 74%, 60% 12%, 8% 36%, 100% 50%; }
+  71% {
+    opacity: 1;
+    background-size: 24% 4px, 48% 2px, 6% 14px, 20% 3px;
+    background-position: 70% 22%, 30% 68%, 96% 44%, 10% 88%;
+  }
+  83% { opacity: 0.5; }
+  93%, 100% { opacity: 0; }
+}
+
+/* Dot-matrix logo flickers on when it changes (see DotLogo) */
+@media (prefers-reduced-motion: no-preference) {
+  .dot-logo-in {
+    animation: dot-logo-in 0.32s steps(1) both;
+  }
+}
+@keyframes dot-logo-in {
+  0% { opacity: 0; }
+  25% { opacity: 1; }
+  45% { opacity: 0.25; }
+  65% { opacity: 1; }
+  80% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+/* DevOps pipeline: the release travelling from one station to the next */
+.pipeline-packet {
+  left: 100%;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .pipeline-packet {
+    animation: pipeline-packet 0.9s cubic-bezier(0.5, 0, 0.2, 1) both;
+  }
+}
+@keyframes pipeline-packet {
+  0% { left: 0; opacity: 1; }
+  85% { left: 100%; opacity: 1; }
+  100% { left: 100%; opacity: 0; }
+}
+
+/* Contact phone buzzes when a notification arrives */
+@media (prefers-reduced-motion: no-preference) {
+  .phone-buzz {
+    animation: phone-buzz 0.36s steps(1) both;
+  }
+}
+@keyframes phone-buzz {
+  0% { transform: translateX(0) rotate(0); }
+  15% { transform: translateX(-3px) rotate(-1.2deg); }
+  30% { transform: translateX(3px) rotate(1.2deg); }
+  45% { transform: translateX(-2px) rotate(-0.8deg); }
+  60% { transform: translateX(2px) rotate(0.8deg); }
+  75% { transform: translateX(-1px) rotate(0); }
+  100% { transform: translateX(0) rotate(0); }
+}
+
+/* Diagram connectors: orange dots flowing along a line */
+.flow-dots {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 0.1 18;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .flow-dots {
+    animation: flow-dots 0.7s linear infinite;
+  }
+}
+@keyframes flow-dots {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -18.1; }
+}
+
+/* Skills board: the orange signal draws itself along a trace, from the chip to the pad */
+.trace-signal {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .trace-signal {
+    animation: trace-signal 0.7s cubic-bezier(0.3, 0, 0.2, 1) both;
+  }
+}
+@keyframes trace-signal {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
 }
 
 /* Custom scrollbar */

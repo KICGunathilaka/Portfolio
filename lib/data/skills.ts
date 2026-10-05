@@ -1,88 +1,126 @@
+import {
+  siAnsible,
+  siC,
+  siCloudflare,
+  siDocker,
+  siGithub,
+  siHtml5,
+  siHuggingface,
+  siJavascript,
+  siJenkins,
+  siLabview,
+  siLinux,
+  siMeta,
+  siMistralai,
+  siMysql,
+  siNginx,
+  siNodedotjs,
+  siNumpy,
+  siOllama,
+  siOpencv,
+  siOpenjdk,
+  siPostgresql,
+  siPrisma,
+  siPython,
+  siRailway,
+  siReact,
+  siRedhat,
+  siTensorflow,
+  siTruenas,
+  siYolo,
+} from "simple-icons";
+
 export interface Skill {
   name: string;
-  category: string;
-  level: number;
-  icon?: string;
-  years?: number;
+  /** Short qualifier shown under the name */
+  note?: string;
+  /** Logo as a 24x24 SVG path (from simple-icons); drawn as a dot matrix */
+  logo?: string;
+  /** Letters to show in dot-matrix type when there is no logo to draw */
+  mark?: string;
 }
 
-export const SKILL_CATEGORIES = [
-  {
-    id: "cloud",
-    label: "Cloud & Infrastructure",
-    color: "#38BDF8",
-    skills: [
-      { name: "AWS", level: 88, years: 4 },
-      { name: "Azure", level: 85, years: 5 },
-      { name: "Linux", level: 92, years: 6 },
-      { name: "Windows Server", level: 88, years: 6 },
-      { name: "Networking", level: 80, years: 5 },
-      { name: "Docker", level: 90, years: 4 },
-      { name: "Kubernetes", level: 78, years: 3 },
-    ],
-  },
+export interface SkillCategory {
+  id: string;
+  label: string;
+  summary: string;
+  skills: Skill[];
+}
+
+export const SKILL_CATEGORIES: SkillCategory[] = [
   {
     id: "devops",
-    label: "DevOps & Automation",
-    color: "#E14504",
+    label: "DevOps & Infrastructure",
+    summary: "Deploying and hosting backend services, building CI/CD pipelines, and managing Linux servers.",
     skills: [
-      { name: "Azure DevOps", level: 90, years: 4 },
-      { name: "GitHub Actions", level: 88, years: 3 },
-      { name: "GitLab CI/CD", level: 82, years: 3 },
-      { name: "Terraform", level: 75, years: 2 },
-      { name: "Jenkins", level: 78, years: 3 },
-      { name: "Ansible", level: 72, years: 2 },
-      { name: "Helm", level: 70, years: 2 },
+      { name: "Linux", logo: siLinux.path },
+      { name: "CI/CD", mark: "CI" },
+      { name: "Docker", logo: siDocker.path },
+      { name: "Jenkins", logo: siJenkins.path },
+      { name: "Ansible", logo: siAnsible.path },
+      { name: "AWS", mark: "AWS" },
+      { name: "Nginx", logo: siNginx.path },
+      { name: "Cloudflare", logo: siCloudflare.path },
+      { name: "GitHub", logo: siGithub.path },
+      { name: "Railway", logo: siRailway.path },
+      { name: "TrueNAS", note: "Network storage", logo: siTruenas.path },
     ],
   },
   {
-    id: "programming",
-    label: "Programming",
-    color: "#A78BFA",
+    id: "ai",
+    label: "AI & Language Models",
+    summary:
+      "Fine-tuning, training and integrating large language models into chatbots and RAG systems, plus deep learning and computer vision research.",
     skills: [
-      { name: "C#", level: 90, years: 6 },
-      { name: "Python", level: 85, years: 5 },
-      { name: "TypeScript", level: 82, years: 3 },
-      { name: "JavaScript", level: 80, years: 4 },
-      { name: "Node.js", level: 78, years: 3 },
-      { name: "React", level: 80, years: 3 },
-      { name: "PowerShell", level: 88, years: 5 },
+      { name: "RAG systems", mark: "RAG" },
+      { name: "LLM fine-tuning", mark: "LLM" },
+      { name: "LLaMA", logo: siMeta.path },
+      { name: "Mistral", logo: siMistralai.path },
+      { name: "LLaVA", mark: "LLV" },
+      { name: "Ollama", logo: siOllama.path },
+      { name: "Unsloth", mark: "UN" },
+      { name: "Hugging Face", logo: siHuggingface.path },
+      { name: "YOLO", logo: siYolo.path },
+      { name: "OpenCV", logo: siOpencv.path },
+      { name: "TensorFlow", logo: siTensorflow.path },
+      { name: "NumPy", logo: siNumpy.path },
+    ],
+  },
+  {
+    id: "languages",
+    label: "Languages",
+    summary: "From embedded C, PLC and LabVIEW on the hardware side to Python and the JavaScript stack.",
+    skills: [
+      { name: "Python", logo: siPython.path },
+      { name: "JavaScript", logo: siJavascript.path },
+      { name: "NodeJS", logo: siNodedotjs.path },
+      { name: "ReactJS", logo: siReact.path },
+      { name: "HTML/CSS", logo: siHtml5.path },
+      { name: "C", logo: siC.path },
+      { name: "Java", logo: siOpenjdk.path },
+      { name: "MATLAB", mark: "MAT" },
+      { name: "LabVIEW", logo: siLabview.path },
+      { name: "PLC", mark: "PLC" },
     ],
   },
   {
     id: "databases",
     label: "Databases",
-    color: "#34D399",
+    summary: "Database design, complex queries and performance optimisation, with ORM integration.",
     skills: [
-      { name: "SQL Server", level: 88, years: 5 },
-      { name: "PostgreSQL", level: 82, years: 4 },
-      { name: "MongoDB", level: 75, years: 3 },
-      { name: "Redis", level: 78, years: 3 },
-      { name: "Elasticsearch", level: 70, years: 2 },
+      { name: "PostgreSQL", note: "Design, complex queries, optimisation", logo: siPostgresql.path },
+      { name: "MySQL", logo: siMysql.path },
+      { name: "Prisma", note: "ORM", logo: siPrisma.path },
     ],
   },
   {
-    id: "ai",
-    label: "AI & Machine Learning",
-    color: "#F59E0B",
+    id: "certificates",
+    label: "Certificates",
+    summary: "Courses and certifications completed or in progress.",
     skills: [
-      { name: "OpenAI APIs", level: 85, years: 2 },
-      { name: "LangChain", level: 78, years: 1 },
-      { name: "Prompt Engineering", level: 88, years: 2 },
-      { name: "Vector Databases", level: 72, years: 1 },
-      { name: "ML Fundamentals", level: 70, years: 2 },
-    ],
-  },
-  {
-    id: "monitoring",
-    label: "Monitoring & Observability",
-    color: "#F472B6",
-    skills: [
-      { name: "Grafana", level: 85, years: 3 },
-      { name: "Prometheus", level: 82, years: 3 },
-      { name: "ELK Stack", level: 78, years: 2 },
-      { name: "Datadog", level: 72, years: 2 },
-      { name: "Azure Monitor", level: 80, years: 3 },
+      { name: "RHCSA", note: "In progress · RH124 completed", logo: siRedhat.path },
+      { name: "AWS Academy", note: "Cloud Foundations", mark: "AWS" },
+      { name: "MATLAB Onramp", note: "Deep Learning · Computer Vision · Machine Learning", mark: "MAT" },
     ],
   },
 ];

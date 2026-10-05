@@ -1,121 +1,117 @@
-export interface Experience {
-  id: string;
-  company: string;
-  role: string;
-  period: string;
-  location: string;
-  type: string;
-  description: string;
-  bullets: string[];
-  tech: string[];
-  current?: boolean;
+export interface Commit {
+  /** Area of work, shown like a commit scope */
+  scope: string;
+  title: string;
+  detail: string;
 }
 
-export const EXPERIENCE: Experience[] = [
-  {
-    id: "current",
-    company: "Tech Enterprise",
-    role: "Senior Systems Engineer",
-    period: "2022 — Present",
-    location: "Remote",
-    type: "Full-time",
-    description:
-      "Lead engineer responsible for cloud infrastructure, DevOps transformation, and AI integration initiatives across the organization.",
-    bullets: [
-      "Architected and deployed enterprise Kubernetes platform serving 200+ microservices on Azure AKS",
-      "Led DevOps transformation reducing deployment frequency from weekly to 12x/day with zero downtime",
-      "Built AI-powered internal tools using OpenAI APIs, cutting engineer productivity overhead by 40%",
-      "Established infrastructure-as-code practices with Terraform modules adopted company-wide",
-      "Mentored team of 5 engineers on cloud-native patterns and DevOps culture",
-    ],
-    tech: ["Azure", "Kubernetes", "Terraform", "GitHub Actions", "Python", "C#", "OpenAI"],
-    current: true,
-  },
-  {
-    id: "mid",
-    company: "Digital Solutions Co.",
-    role: "DevOps Engineer",
-    period: "2020 — 2022",
-    location: "Hybrid",
-    type: "Full-time",
-    description:
-      "Focused on CI/CD pipeline development, container orchestration, and cloud migration projects for enterprise clients.",
-    bullets: [
-      "Designed CI/CD pipelines with Azure DevOps for 15+ enterprise applications",
-      "Migrated 30+ on-premises applications to Azure cloud reducing infrastructure costs by 45%",
-      "Implemented centralized logging and monitoring with ELK Stack and Grafana",
-      "Built automated infrastructure provisioning reducing setup time from weeks to hours",
-      "Created Docker containerization strategy for legacy .NET applications",
-    ],
-    tech: ["Azure DevOps", "Docker", "Azure", "Ansible", "Jenkins", "ELK Stack", ".NET"],
-  },
-  {
-    id: "junior",
-    company: "Systems Integrator Ltd.",
-    role: "Systems Administrator / Junior Engineer",
-    period: "2018 — 2020",
-    location: "On-site",
-    type: "Full-time",
-    description:
-      "Managed Windows Server and Linux infrastructure, network administration, and automation scripting.",
-    bullets: [
-      "Administered Windows Server 2016/2019 environments for 500+ users",
-      "Developed PowerShell automation scripts reducing manual IT tasks by 60%",
-      "Managed networking infrastructure: Cisco switches, VLANs, VPNs, firewall rules",
-      "Implemented backup and disaster recovery procedures with 99.9% success rate",
-      "Supported migration from on-premises Exchange to Microsoft 365",
-    ],
-    tech: ["Windows Server", "Linux", "PowerShell", "Cisco", "Active Directory", "Microsoft 365"],
-  },
-];
+export interface Role {
+  id: string;
+  title: string;
+  org?: string;
+  period: string;
+  note?: string;
+  current?: boolean;
+  commits: Commit[];
+}
 
-export const CERTIFICATIONS = [
+// Newest first. Each role reads as a branch in a git log; each thing done there is a commit on it.
+export const EXPERIENCE: Role[] = [
   {
-    name: "AWS Solutions Architect",
-    issuer: "Amazon Web Services",
-    level: "Associate",
-    year: 2023,
-    badge: "☁️",
-    color: "#FF9900",
+    id: "bloomtech",
+    title: "Systems Engineer",
+    org: "BloomTech",
+    period: "2025 — Present",
+    note: "Joined as Trainee Systems Engineer",
+    current: true,
+    commits: [
+      {
+        scope: "cicd",
+        title: "CI/CD for BloomAudit",
+        detail: "The complete pipeline for the BloomAudit application, built end to end.",
+      },
+      {
+        scope: "deploy",
+        title: "Backend deployment & hosting",
+        detail: "Deploying and hosting backend services with Cloudflare, Docker, Nginx and Railway.",
+      },
+      {
+        scope: "llm",
+        title: "LLM development & integration",
+        detail: "Fine-tuning, training and integrating LLaMA, Mistral and LLaVA into chatbots and RAG systems.",
+      },
+      {
+        scope: "db",
+        title: "Database design & management",
+        detail: "PostgreSQL design, complex queries and performance optimisation, with Prisma ORM.",
+      },
+      {
+        scope: "backend",
+        title: "Backend & service integration",
+        detail:
+          "Custom backends connecting applications to databases and external services, including Element (Matrix) messaging.",
+      },
+      {
+        scope: "linux",
+        title: "Linux & server management",
+        detail: "Linux for development, deployment and server management.",
+      },
+      {
+        scope: "storage",
+        title: "Network-attached storage",
+        detail: "Managing and configuring TrueNAS network storage.",
+      },
+      {
+        scope: "design",
+        title: "Solution design",
+        detail: "Database structures and custom solutions for real business problems across multiple projects.",
+      },
+    ],
   },
   {
-    name: "Azure Administrator",
-    issuer: "Microsoft",
-    level: "Associate (AZ-104)",
-    year: 2022,
-    badge: "⚡",
-    color: "#0078D4",
+    id: "orel",
+    title: "Digital Twin & IoT Engineer",
+    org: "OREL Corporation",
+    period: "Aug — Nov 2023",
+    note: "Internship",
+    commits: [
+      {
+        scope: "labview",
+        title: "Assembly-line automation",
+        detail: "Developed and implemented LabVIEW applications for assembly-line automation.",
+      },
+      {
+        scope: "iot",
+        title: "Sensors & data collection",
+        detail:
+          "Integrated and programmed sensors to improve system performance and data collection, and established communication with a Python server.",
+      },
+    ],
   },
   {
-    name: "Azure DevOps Engineer",
-    issuer: "Microsoft",
-    level: "Expert (AZ-400)",
-    year: 2023,
-    badge: "🔷",
-    color: "#0078D4",
+    id: "egravity",
+    title: "Trainee Engineer",
+    org: "E-Gravity Solutions",
+    period: "Apr — Jul 2022",
+    note: "Internship · Kottawa",
+    commits: [
+      {
+        scope: "embedded",
+        title: "PIC microcontrollers",
+        detail: "Worked with PIC microchips and built a grounding in embedded systems and electronics.",
+      },
+    ],
   },
   {
-    name: "CCNA",
-    issuer: "Cisco",
-    level: "Associate",
-    year: 2021,
-    badge: "🌐",
-    color: "#1BA0D7",
-  },
-  {
-    name: "Kubernetes Administrator",
-    issuer: "CNCF",
-    level: "CKA",
-    year: 2023,
-    badge: "⚙️",
-    color: "#326CE5",
-  },
-  {
-    name: "Terraform Associate",
-    issuer: "HashiCorp",
-    level: "Associate",
-    year: 2022,
-    badge: "🏗️",
-    color: "#7B42BC",
+    id: "hardware",
+    title: "Computer Hardware Technician",
+    period: "2019 — 2020",
+    commits: [
+      {
+        scope: "hardware",
+        title: "Assembly & repair",
+        detail: "Computer assembly, troubleshooting and repairing.",
+      },
+    ],
   },
 ];

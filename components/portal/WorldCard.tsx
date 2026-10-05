@@ -1,356 +1,118 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { useRouter } from "next/navigation";
-import { ArrowRight, Server, Mountain } from "lucide-react";
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
+import { ScrambleText } from "@/components/shared/ScrambleText";
 
 interface WorldCardProps {
   side: "engineering" | "explorer";
 }
 
-const ENGINEERING_GRID = [
-  "pipeline:", "docker", "k8s", "AWS", "CI/CD",
-  "terraform", "nginx", "redis", "> deploy", "python",
-  "git push", "kubectl", "grafana", "linux", "C#",
-];
-
-const EXPLORER_ICONS = ["⛰️", "🏕️", "🌄", "🌲", "🦅", "⛺", "🌌", "🏔️", "🌿", "🌅"];
+const WORLDS = {
+  engineering: {
+    index: "01",
+    href: "/engineering",
+    title: "Engineer",
+    role: "Systems Engineer",
+    description: "Building scalable software, cloud infrastructure, automation, and intelligent systems.",
+    cta: "Enter engineering",
+    image: "/images/profile.jpg",
+    imagePosition: "object-[50%_0%]",
+  },
+  explorer: {
+    index: "02",
+    href: "/explorer",
+    title: "Explorer",
+    role: "The Explorer",
+    description: "Exploring mountains, forests, hidden trails, and unforgettable journeys.",
+    cta: "Begin adventure",
+    image: "/images/explorer/703720695_940892928995787_7548368580049026280_n.jpg",
+    imagePosition: "object-[50%_100%] md:object-[50%_66%]",
+  },
+} as const;
 
 export function WorldCard({ side }: WorldCardProps) {
-  const router = useRouter();
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [isHovered, setIsHovered] = useState(false);
-
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [8, -8]), { damping: 30, stiffness: 300 });
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-8, 8]), { damping: 30, stiffness: 300 });
-
+  const world = WORLDS[side];
   const isEng = side === "engineering";
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = cardRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    mouseX.set((e.clientX - rect.left) / rect.width - 0.5);
-    mouseY.set((e.clientY - rect.top) / rect.height - 0.5);
-  };
-
-  const handleMouseLeave = () => {
-    mouseX.set(0);
-    mouseY.set(0);
-    setIsHovered(false);
-  };
-
-  const handleClick = () => {
-    router.push(isEng ? "/engineering" : "/explorer");
-  };
+  // Bumped on hover/focus to replay the title decode
+  const [replays, setReplays] = useState(0);
 
   return (
-    <motion.div
-      ref={cardRef}
-      className="relative flex-1 h-full flex flex-col items-center justify-center cursor-pointer overflow-hidden"
-      style={{ perspective: 1000 }}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={handleMouseLeave}
-      onClick={handleClick}
-      initial={{ opacity: 0, x: isEng ? -60 : 60 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: 1.2, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+    <Link
+      href={world.href}
+      onMouseEnter={() => setReplays((n) => n + 1)}
+      onFocus={() => setReplays((n) => n + 1)}
+      className="group relative flex h-full flex-col justify-end overflow-hidden p-4 sm:p-8 lg:p-10 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent"
     >
-      {/* World-specific background */}
-      {isEng ? <EngineeringBackground isHovered={isHovered} /> : <ExplorerBackground isHovered={isHovered} />}
-
-      {/* Hover overlay */}
+      {/* Photo — wipes in from the bottom, greyscale at rest, colour on hover */}
       <motion.div
-        className="absolute inset-0 pointer-events-none"
-        animate={{
-          background: isHovered
-            ? isEng
-              ? "rgba(11,34,64,0.4)"
-              : "rgba(20,12,5,0.3)"
-            : "rgba(0,0,0,0.55)",
-        }}
-        transition={{ duration: 0.4 }}
-      />
-
-      {/* Divider line */}
-      {isEng && (
-        <div className="absolute right-0 top-0 bottom-0 w-px"
-          style={{ background: "linear-gradient(to bottom, transparent, rgba(255,255,255,0.12), transparent)" }}
-        />
-      )}
-
-      {/* Card content */}
-      <motion.div
-        className="relative z-10 flex flex-col items-center text-center px-3 sm:px-6 md:px-8 max-w-md"
-        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+        className="absolute inset-0"
+        initial={{ clipPath: "inset(100% 0% 0% 0%)" }}
+        animate={{ clipPath: "inset(0% 0% 0% 0%)" }}
+        transition={{ delay: isEng ? 0.25 : 0.4, duration: 1.1, ease: [0.76, 0, 0.24, 1] }}
       >
-        {/* Icon */}
-        <motion.div
-          className="mb-4 sm:mb-8 p-2.5 sm:p-5 rounded-xl sm:rounded-2xl"
-          style={{
-            background: isEng
-              ? "rgba(56,189,248,0.08)"
-              : "rgba(251,146,60,0.08)",
-            border: `1px solid ${isEng ? "rgba(56,189,248,0.2)" : "rgba(251,146,60,0.2)"}`,
-            boxShadow: isHovered
-              ? isEng
-                ? "0 0 40px rgba(56,189,248,0.25), inset 0 0 20px rgba(56,189,248,0.05)"
-                : "0 0 40px rgba(251,146,60,0.25), inset 0 0 20px rgba(251,146,60,0.05)"
-              : "none",
-          }}
-          animate={{ scale: isHovered ? 1.1 : 1, translateZ: isHovered ? 20 : 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          {isEng
-            ? <Server className="w-6 h-6 sm:w-10 sm:h-10 text-sky-400" />
-            : <Mountain className="w-6 h-6 sm:w-10 sm:h-10 text-orange-400" />
-          }
-        </motion.div>
-
-        {/* Label */}
-        <motion.div
-          className="text-[9px] sm:text-xs font-semibold tracking-[0.2em] sm:tracking-[0.3em] uppercase mb-2 sm:mb-4"
-          style={{ color: isEng ? "rgba(56,189,248,0.7)" : "rgba(251,146,60,0.7)" }}
-          animate={{ translateZ: isHovered ? 15 : 0 }}
-        >
-          {isEng ? "World I" : "World II"}
-        </motion.div>
-
-        {/* Title */}
-        <motion.h2
-          className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-2 sm:mb-6 leading-tight"
-          animate={{ translateZ: isHovered ? 25 : 0 }}
-        >
-          {isEng ? "Systems\nEngineer" : "The\nExplorer"}
-        </motion.h2>
-
-        {/* Subtitle */}
-        <motion.p
-          className="hidden sm:block text-white/50 text-base md:text-lg leading-relaxed mb-10 max-w-xs"
-          animate={{ translateZ: isHovered ? 10 : 0, opacity: isHovered ? 0.85 : 0.5 }}
-          transition={{ duration: 0.3 }}
-        >
-          {isEng
-            ? "Building scalable software, cloud infrastructure, automation, and intelligent systems."
-            : "Exploring mountains, forests, hidden trails, and unforgettable journeys."}
-        </motion.p>
-
-        {/* CTA Button */}
-        <motion.button
-          className="group flex items-center gap-1.5 sm:gap-3 px-4 py-2.5 sm:px-8 sm:py-4 rounded-full font-semibold text-xs sm:text-sm transition-all duration-300"
-          style={{
-            background: isEng
-              ? "rgba(56,189,248,0.12)"
-              : "rgba(251,146,60,0.12)",
-            border: `1px solid ${isEng ? "rgba(56,189,248,0.3)" : "rgba(251,146,60,0.3)"}`,
-            color: isEng ? "#38BDF8" : "#FB923C",
-          }}
-          animate={{
-            translateZ: isHovered ? 30 : 0,
-            scale: isHovered ? 1.05 : 1,
-            boxShadow: isHovered
-              ? isEng
-                ? "0 0 30px rgba(56,189,248,0.3)"
-                : "0 0 30px rgba(251,146,60,0.3)"
-              : "none",
-          }}
-          whileTap={{ scale: 0.97 }}
-        >
-          <span className="sm:hidden">{isEng ? "Enter" : "Explore"}</span>
-          <span className="hidden sm:inline">{isEng ? "Enter Engineering" : "Begin Adventure"}</span>
-          <ArrowRight size={14} className="sm:w-4 sm:h-4 transition-transform group-hover:translate-x-1" />
-        </motion.button>
+        {/* Slow continuous drift; the two sides run half a cycle apart */}
+        <div className="absolute inset-0 motion-safe:animate-drift" style={{ animationDelay: isEng ? "0s" : "-13s" }}>
+          <Image
+            src={world.image}
+            alt=""
+            fill
+            priority
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className={`object-cover grayscale brightness-75 transition-[filter,transform] duration-700 ease-out group-hover:scale-[1.03] group-hover:grayscale-0 group-hover:brightness-90 ${world.imagePosition}`}
+          />
+        </div>
       </motion.div>
-    </motion.div>
-  );
-}
 
-function EngineeringBackground({ isHovered }: { isHovered: boolean }) {
-  return (
-    <div className="absolute inset-0 overflow-hidden">
-      {/* Dark tech gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#020c18] via-[#0a1628] to-[#050d1a]" />
-
-      {/* Grid */}
+      {/* Scrims so the text stays readable over the photo */}
+      <div className="absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-[#0A0A0A]/80 to-transparent" />
+      {/* Side-by-side layout: fade toward the seam so the two photos don't butt against each other */}
       <div
-        className="absolute inset-0 opacity-10"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(56,189,248,0.3) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(56,189,248,0.3) 1px, transparent 1px)
-          `,
-          backgroundSize: "60px 60px",
-        }}
+        className={`absolute inset-y-0 hidden w-28 from-[#0A0A0A] to-transparent md:block ${
+          isEng ? "right-0 bg-gradient-to-l" : "left-0 bg-gradient-to-r"
+        }`}
       />
+      <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/60 to-transparent" />
 
-      {/* Floating code chips */}
-      {ENGINEERING_GRID.map((label, i) => (
-        <motion.div
-          key={i}
-          className="absolute text-xs font-mono text-sky-400/30 select-none"
-          style={{
-            left: `${8 + (i % 5) * 20}%`,
-            top: `${10 + Math.floor(i / 5) * 25}%`,
-          }}
-          animate={{
-            opacity: isHovered ? [0.2, 0.6, 0.2] : 0.2,
-            y: [0, -8, 0],
-          }}
-          transition={{
-            duration: 3 + i * 0.3,
-            delay: i * 0.15,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        >
-          {label}
-        </motion.div>
-      ))}
-
-      {/* Glowing orb */}
+      {/* Title block */}
       <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
-        animate={{
-          scale: isHovered ? [1, 1.3, 1] : 1,
-          opacity: isHovered ? 0.15 : 0.06,
-        }}
-        transition={{ duration: 2, repeat: isHovered ? Infinity : 0 }}
-        style={{
-          width: 400,
-          height: 400,
-          background: "radial-gradient(circle, rgba(56,189,248,0.4) 0%, transparent 70%)",
-        }}
-      />
-
-      {/* Moving light rays */}
-      {isHovered && (
-        <motion.div
-          className="absolute inset-0"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          style={{
-            background: "conic-gradient(from 0deg at 50% 50%, transparent 60%, rgba(56,189,248,0.04) 70%, transparent 80%)",
-          }}
-        />
-      )}
-    </div>
-  );
-}
-
-function ExplorerBackground({ isHovered }: { isHovered: boolean }) {
-  return (
-    <div className="absolute inset-0 overflow-hidden">
-      {/* Warm dark sky */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0a0705] via-[#120c08] to-[#1a0e06]" />
-
-      {/* Mountain silhouette */}
-      <div className="absolute bottom-0 left-0 right-0">
-        <svg viewBox="0 0 1200 400" preserveAspectRatio="xMidYMax slice" className="w-full">
-          <path
-            d="M0,400 L0,280 L150,160 L280,240 L400,100 L520,200 L640,60 L760,180 L880,120 L1000,200 L1120,140 L1200,220 L1200,400 Z"
-            fill="rgba(5,3,2,0.9)"
-          />
-          <path
-            d="M0,400 L0,320 L100,240 L220,300 L340,200 L460,280 L580,180 L700,260 L820,200 L940,270 L1060,210 L1200,280 L1200,400 Z"
-            fill="rgba(8,5,3,0.95)"
-          />
-        </svg>
-      </div>
-
-      {/* Stars */}
-      {Array.from({ length: 50 }, (_, i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full bg-white"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 60}%`,
-            width: Math.random() * 2 + 0.5,
-            height: Math.random() * 2 + 0.5,
-          }}
-          animate={{
-            opacity: [0.2, isHovered ? 1 : 0.5, 0.2],
-            scale: [1, isHovered ? 1.5 : 1.2, 1],
-          }}
-          transition={{
-            duration: 2 + Math.random() * 3,
-            delay: Math.random() * 2,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-
-      {/* Warm horizon glow */}
-      <motion.div
-        className="absolute bottom-0 left-0 right-0 h-64"
-        animate={{
-          opacity: isHovered ? 0.4 : 0.15,
-        }}
-        transition={{ duration: 0.6 }}
-        style={{
-          background: "linear-gradient(to top, rgba(225,69,4,0.3), rgba(251,146,60,0.1), transparent)",
-        }}
-      />
-
-      {/* Moon */}
-      <motion.div
-        className="absolute top-16 right-24"
-        animate={{
-          scale: isHovered ? 1.1 : 1,
-          filter: isHovered ? "blur(0px)" : "blur(1px)",
-        }}
+        className="relative"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: isEng ? 0.6 : 0.75, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       >
-        <div
-          className="rounded-full"
-          style={{
-            width: 48,
-            height: 48,
-            background: "radial-gradient(circle at 35% 35%, rgba(255,240,200,0.9), rgba(200,180,120,0.6))",
-            boxShadow: "0 0 30px rgba(255,220,100,0.3), 0 0 60px rgba(255,200,50,0.1)",
-          }}
-        />
-      </motion.div>
+        <p className="flex items-center gap-2 font-mono text-[10px] sm:text-xs text-neutral-400">
+          <span className="text-neutral-500">{world.index}</span>
+          {world.role}
+          <span className="ml-auto h-2 w-2 rounded-full bg-accent opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100" />
+        </p>
 
-      {/* Floating nature icons */}
-      {EXPLORER_ICONS.slice(0, 6).map((icon, i) => (
-        <motion.div
-          key={i}
-          className="absolute text-2xl select-none opacity-20"
-          style={{
-            left: `${10 + i * 15}%`,
-            top: `${20 + (i % 3) * 20}%`,
-          }}
-          animate={{
-            y: [0, -15, 0],
-            opacity: isHovered ? 0.5 : 0.2,
-          }}
-          transition={{
-            duration: 4 + i * 0.5,
-            delay: i * 0.4,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+        <h2
+          className="mt-2 sm:mt-3 font-display font-black uppercase leading-[0.9] text-white text-[10.5vw] md:text-[min(6.2vw,6rem)]"
         >
-          {icon}
-        </motion.div>
-      ))}
+          <ScrambleText
+            text={world.title}
+            delay={isEng ? 1000 : 1150}
+            duration={replays === 0 ? 700 : 400}
+            replayKey={replays}
+          />
+        </h2>
 
-      {/* Fog effect */}
-      {isHovered && (
-        <motion.div
-          className="absolute inset-0 pointer-events-none"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.15 }}
-          style={{
-            background: "radial-gradient(ellipse at 50% 100%, rgba(251,146,60,0.2) 0%, transparent 60%)",
-          }}
-        />
-      )}
-    </div>
+        <p className="mt-5 hidden max-w-sm font-mono text-xs leading-relaxed text-neutral-400 md:block">
+          {world.description}
+        </p>
+
+        <div className="mt-3 sm:mt-8 flex items-center justify-between border-t border-neutral-700 pt-3 sm:pt-4 font-mono text-xs sm:text-sm text-neutral-200 transition-colors duration-300 group-hover:border-neutral-400">
+          <span>{world.cta}</span>
+          <ArrowUpRight
+            className="h-4 w-4 sm:h-5 sm:w-5 transition-[transform,color] duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-accent"
+            strokeWidth={1.5}
+          />
+        </div>
+      </motion.div>
+    </Link>
   );
 }
