@@ -1,51 +1,36 @@
 import { GlassNav } from "@/components/shared/GlassNav";
 import { ScrollProgress } from "@/components/shared/ScrollProgress";
-import { GlitchIn } from "@/components/shared/GlitchIn";
-import { WorldSwitcher } from "@/components/shared/WorldSwitcher";
 import { ExplorerHero } from "@/components/explorer/ExplorerHero";
-import { HikingAdventures } from "@/components/explorer/HikingAdventures";
-import { PhotoGallery } from "@/components/explorer/PhotoGallery";
-import { GearSection } from "@/components/explorer/GearSection";
-import { ExplorerContact } from "@/components/explorer/ExplorerContact";
+import { TrailChapters } from "@/components/explorer/TrailChapters";
+import { FrameReels } from "@/components/explorer/FrameReels";
+import { ExplorerOutro } from "@/components/explorer/ExplorerOutro";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "The Explorer — Portfolio",
-  description:
-    "Mountains, trails, camping, photography, and adventures across the world.",
+  title: "Isuru Gunathilaka — Explorer",
+  description: "Hiking and camping in the highlands of Sri Lanka, in photographs.",
 };
 
 export default function ExplorerPage() {
   return (
-    <div
-      className="min-h-screen overflow-x-clip"
-      style={{ background: "#080504", color: "#F5EDD8" }}
-    >
+    <div className="min-h-screen bg-forest text-bone">
       <GlassNav />
-      <ScrollProgress color="#FB923C" />
+      <ScrollProgress color="#CBEA5C" />
       <ExplorerHero />
-      <GlitchIn>
-        <HikingAdventures />
-      </GlitchIn>
-      <GlitchIn>
-        <PhotoGallery />
-      </GlitchIn>
-      <GlitchIn>
-        <GearSection />
-      </GlitchIn>
-      <GlitchIn>
-        <ExplorerContact />
-      </GlitchIn>
-      <WorldSwitcher />
+      <TrailChapters />
+      <FrameReels />
+      <ExplorerOutro />
 
-      {/* Footer */}
-      <footer
-        className="py-12 text-center"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}
-      >
-        <p className="text-orange-200/20 text-sm">
-          © 2024 · The Explorer · Where every trail leads somewhere worth going
-        </p>
+      <footer className="border-t border-bone/10">
+        <div className="mx-auto flex max-w-[1500px] flex-wrap items-center justify-between gap-x-8 gap-y-3 px-5 py-6 text-xs font-medium text-bone/50 sm:px-10">
+          <p className="flex items-center gap-2.5">
+            <span className="block h-2 w-2 rounded-full bg-lime" />© {new Date().getFullYear()} Isuru Gunathilaka
+          </p>
+          <p className="hidden sm:block">Hiking &amp; camping · Sri Lanka</p>
+          <a href="#hero" className="text-bone/80 transition-colors hover:text-bone">
+            Back to top ↑
+          </a>
+        </div>
       </footer>
     </div>
   );

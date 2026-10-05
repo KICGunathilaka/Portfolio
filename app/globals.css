@@ -26,7 +26,7 @@ html {
 }
 
 body {
-  background: var(--primary-dark);
+  background: #0A0A0A;
   color: var(--text-primary);
   font-family: var(--font-jetbrains), monospace;
   overflow-x: hidden;

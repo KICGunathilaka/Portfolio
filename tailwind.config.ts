@@ -20,6 +20,10 @@ const config: Config = {
           light: "#FF5722",
           glow: "rgba(225,69,4,0.4)",
         },
+        // Explorer page palette: forest-dark page, bone text, one lime. Deliberately unlike the engineering side.
+        forest: "#0B0F0C",
+        bone: "#ECEFE6",
+        lime: "#CBEA5C",
         glass: {
           white: "rgba(255,255,255,0.05)",
           border: "rgba(255,255,255,0.1)",
@@ -29,6 +33,8 @@ const config: Config = {
         sans: ["var(--font-jetbrains)", "monospace"],
         display: ["var(--font-doto)", "var(--font-jetbrains)", "monospace"],
         mono: ["var(--font-jetbrains)", "monospace"],
+        // Explorer page only (loaded in app/explorer/layout.tsx)
+        poster: ["var(--font-archivo)", "system-ui", "sans-serif"],
       },
       animation: {
         "aurora": "aurora 20s ease infinite",
@@ -41,11 +47,32 @@ const config: Config = {
         "particle-float": "particleFloat 8s ease-in-out infinite",
         "drift": "drift 26s ease-in-out infinite alternate",
         "blink": "blink 1s steps(1) infinite",
+        "wall-up": "wallUp 60s linear infinite",
+        "wall-down": "wallDown 60s linear infinite",
+        "reel-left": "reelLeft 140s linear infinite",
+        "reel-right": "reelRight 140s linear infinite",
       },
       keyframes: {
         drift: {
           from: { transform: "scale(1) translate3d(0, 0, 0)" },
           to: { transform: "scale(1.08) translate3d(-1.5%, -1%, 0)" },
+        },
+        // Each stack holds its photos twice, so moving by half its height loops seamlessly
+        wallUp: {
+          from: { transform: "translateY(0)" },
+          to: { transform: "translateY(-50%)" },
+        },
+        wallDown: {
+          from: { transform: "translateY(-50%)" },
+          to: { transform: "translateY(0)" },
+        },
+        reelLeft: {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" },
+        },
+        reelRight: {
+          from: { transform: "translateX(-50%)" },
+          to: { transform: "translateX(0)" },
         },
         blink: {
           "0%, 49%": { opacity: "1" },
