@@ -4,7 +4,7 @@ import { ExplorerHero } from "@/components/explorer/ExplorerHero";
 import { TrailChapters } from "@/components/explorer/TrailChapters";
 import { FrameReels } from "@/components/explorer/FrameReels";
 import { ScrollMarquee } from "@/components/explorer/ScrollMarquee";
-import { ShapeDrift } from "@/components/explorer/ShapeDrift";
+import { SlantedSlices } from "@/components/explorer/SlantedSlices";
 import { ExplorerOutro } from "@/components/explorer/ExplorerOutro";
 import type { Metadata } from "next";
 
@@ -21,7 +21,7 @@ export default function ExplorerPage() {
       <ExplorerHero />
       <TrailChapters />
       <ScrollMarquee words={["Hiking", "Camping", "Waterfalls", "Ridges"]} />
-      <ShapeDrift />
+      <SlantedSlices />
       <ScrollMarquee words={["Mist", "Trails", "Tents", "Summits"]} direction={-1} />
       <FrameReels />
       <ExplorerOutro />
