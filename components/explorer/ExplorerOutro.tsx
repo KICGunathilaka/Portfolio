@@ -9,11 +9,15 @@ import { RiseText } from "./RiseText";
 
 const EMAIL = "isurugunathilaka1@gmail.com";
 const LINKEDIN = "https://www.linkedin.com/in/isuru-gunathilakansbm";
+const INSTAGRAM = "https://www.instagram.com/isuru_voyager/";
+const FACEBOOK = "https://www.facebook.com/isuru.gunathilaka.2025/";
 // The day ends at camp: a lit tent under the night sky
 const PHOTO = "/images/explorer/703665774_940897148995365_2525273680976652082_n.jpg";
 
 const LINKS = [
   { label: "Email", detail: EMAIL, href: `mailto:${EMAIL}`, external: false },
+  { label: "Instagram", detail: "@isuru_voyager", href: INSTAGRAM, external: true },
+  { label: "Facebook", detail: "isuru.gunathilaka.2025", href: FACEBOOK, external: true },
   { label: "LinkedIn", detail: "in/isuru-gunathilakansbm", href: LINKEDIN, external: true },
   { label: "Engineer", detail: "The other side of the week", href: "/engineering", external: false },
 ];
@@ -46,13 +50,13 @@ export function ExplorerOutro() {
         </motion.div>
       </div>
 
-      <div className="relative mx-auto flex max-w-[1500px] flex-col justify-between gap-12 px-5 pb-12 pt-10 sm:px-10 lg:min-h-[100dvh] lg:pb-14 lg:pt-32">
+      <div className="relative mx-auto flex max-w-[1500px] flex-col justify-between gap-12 px-5 pb-12 pt-10 sm:px-10 lg:min-h-[100dvh] lg:pb-12 lg:pt-28">
         <div>
           <p className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.14em]">
             <span className="h-2.5 w-2.5 rounded-full bg-lime motion-safe:animate-blink" />
             Contact
           </p>
-          <h2 className="mt-6 text-[19vw] font-black uppercase leading-[0.82] tracking-[-0.01em] [font-stretch:62%] lg:text-[min(12.5vw,13rem)]">
+          <h2 className="mt-6 text-[19vw] font-black uppercase leading-[0.82] tracking-[-0.01em] [font-stretch:62%] lg:text-[min(10.5vw,11rem)]">
             <RiseText text="See you" />
             <br />
             <RiseText text="out there." className="text-lime" delay={0.2} />
@@ -66,7 +70,7 @@ export function ExplorerOutro() {
               <>
                 {/* Lime floods in from the left on hover */}
                 <span className="absolute inset-0 origin-left scale-x-0 bg-lime transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100 group-focus-visible:scale-x-100" />
-                <span className="relative text-[11vw] font-black uppercase leading-none [font-stretch:62%] sm:text-6xl lg:text-7xl">
+                <span className="relative text-[11vw] font-black uppercase leading-none [font-stretch:62%] sm:text-5xl lg:text-6xl">
                   {link.label}
                 </span>
                 <span className="relative ml-auto hidden truncate text-sm font-medium text-bone/70 transition-colors duration-300 group-hover:text-forest sm:block lg:hidden">
@@ -79,14 +83,14 @@ export function ExplorerOutro() {
               </>
             );
             const className =
-              "group relative flex items-center gap-5 overflow-hidden border-t border-bone/25 px-2 py-4 outline-none transition-colors duration-300 hover:text-forest focus-visible:text-forest sm:px-4 sm:py-5";
+              "group relative flex items-center gap-5 overflow-hidden border-t border-bone/25 px-2 py-3.5 outline-none transition-colors duration-300 hover:text-forest focus-visible:text-forest sm:px-4 sm:py-4";
             return (
               <motion.li
                 key={link.label}
                 initial={{ opacity: 0, x: -40 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ amount: 0.6 }}
-                transition={{ delay: i * 0.1, duration: 0.7, ease: EASE }}
+                transition={{ delay: i * 0.08, duration: 0.7, ease: EASE }}
               >
                 {link.href.startsWith("/") ? (
                   <Link href={link.href} className={className}>
