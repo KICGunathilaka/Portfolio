@@ -61,8 +61,7 @@ export function DevOpsPipeline() {
             </h2>
           </div>
           <p className="max-w-md pb-2 font-mono text-sm leading-relaxed text-neutral-400">
-            The CI/CD I built end to end for the BloomAudit application: the route a change takes from a
-            commit to production.
+            CI/CD for BloomAudit, from commit to production.
           </p>
         </div>
 
@@ -196,7 +195,6 @@ export function DevOpsPipeline() {
                         {stage.tool}
                       </span>
                     </p>
-                    <p className="mt-2 font-mono text-[11px] leading-relaxed text-neutral-500">{stage.detail}</p>
                   </div>
                 </li>
               );

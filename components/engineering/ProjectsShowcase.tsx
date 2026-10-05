@@ -75,9 +75,6 @@ export function ProjectsShowcase() {
               {inView ? <ScrambleText text="Projects" duration={600} /> : <span className="invisible">Projects</span>}
             </h2>
           </div>
-          <p className="max-w-md pb-2 font-mono text-sm leading-relaxed text-neutral-400">
-            Work at BloomTech, published research, and the industrial projects that came before.
-          </p>
         </div>
 
         {/* Narrow screens: one project per card, swiped sideways */}

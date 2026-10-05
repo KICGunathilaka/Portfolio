@@ -11,49 +11,49 @@ const TIMELINE = [
     icon: Wrench,
     title: "Hardware Technician",
     meta: "Computer Hardware Technician · 2019 – 2020",
-    text: "Where it started: assembling, troubleshooting and repairing computers.",
+    text: "Assembling and repairing computers.",
   },
   {
     year: "2020",
     icon: GraduationCap,
     title: "NSBM University",
     meta: "NSBM Green University · 2020 – 2024",
-    text: "Began a BSc Engineering (Hons) in Computer Systems Engineering.",
+    text: "Started BSc Computer Systems Engineering.",
   },
   {
     year: "2022",
     icon: Cpu,
     title: "E-Gravity Solutions",
     meta: "Trainee Engineer · Apr – Jul 2022",
-    text: "Worked with PIC microcontrollers and built a grounding in embedded systems and electronics.",
+    text: "PIC microcontrollers and embedded systems.",
   },
   {
     year: "2023",
     icon: Factory,
     title: "OREL Corporation",
     meta: "Digital Twin & IoT Engineer · Aug – Nov 2023",
-    text: "Built LabVIEW applications for assembly-line automation, integrated and programmed sensors, and linked the line to a Python server.",
+    text: "LabVIEW automation and IoT sensors.",
   },
   {
     year: "2024",
     icon: Award,
     title: "Graduated",
     meta: "BSc Eng (Hons) Computer Systems Engineering · Oct 2024",
-    text: "Second Class Upper Division, NSBM Green University.",
+    text: "Second Class Upper Division.",
   },
   {
     year: "2025",
     icon: FileText,
     title: "IEEE Publication",
     meta: "Research · IEEE Xplore",
-    text: "Deep learning and computer vision research on classifying healthy and diseased guppy fish for the ornamental export industry, built with Python, YOLO, OpenCV and TensorFlow.",
+    text: "Deep learning research, published by IEEE.",
   },
   {
     year: "Now",
     icon: Server,
     title: "BloomTech",
     meta: "Systems Engineer · joined as Trainee Systems Engineer",
-    text: "CI/CD end to end for the BloomAudit application, Linux infrastructure, RAG systems and LLM fine-tuning.",
+    text: "CI/CD, Linux, RAG and LLM fine-tuning.",
   },
 ];
 
@@ -103,22 +103,9 @@ export function AboutSection() {
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            {/* Wide screens let the timeline below tell the story, so the bio stays to one line */}
-            <p className="hidden text-base text-neutral-300 lg:block">
+            <p className="text-sm text-neutral-300 lg:text-base">
               Computer systems engineer from NSBM Green University, now building CI/CD, Linux infrastructure
               and language-model systems at <span className="text-white">BloomTech</span>.
-            </p>
-            <p className="lg:hidden">
-              I studied Computer Systems Engineering at NSBM Green University and graduated in 2024 with a
-              Second Class Upper. Along the way I repaired computers, programmed PIC microcontrollers at
-              E-Gravity Solutions, and automated an assembly line with LabVIEW and IoT sensors at OREL
-              Corporation.
-            </p>
-            <p className="lg:hidden">
-              My research used deep learning and computer vision to tell healthy guppy fish from diseased
-              ones, and it was published by IEEE. Today I&apos;m a{" "}
-              <span className="text-neutral-100">systems engineer at BloomTech</span>, where I run CI/CD and
-              Linux infrastructure and build RAG systems and fine-tuned language models.
             </p>
           </motion.div>
         </div>

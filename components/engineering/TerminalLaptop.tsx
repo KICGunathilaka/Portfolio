@@ -11,11 +11,8 @@ const TICK_MS = 45;
 const AFTER_CMD = 8;
 const AFTER_OUT = 10;
 const HOLD = 50;
-// After the hold the session is "infected": the screen corrupts, the laptop tears apart and
-// drops out, stays gone for a beat, then glitches back in and the session starts over.
-const GLITCH = 34;
-const OFF = 18;
-const BOOT = 9;
+// How long the laptop glitches into existence when the page loads
+const INTRO_MS = 1400;
 
 const NOISE = "█▓▒░#@$%&/<>01";
 const corrupt = (text: string, amount: number) =>
@@ -27,7 +24,7 @@ const ticksFor = (line: Line) => ("cmd" in line ? line.cmd.length + AFTER_CMD : 
 
 /**
  * A line-drawn laptop whose screen runs a looping terminal session; keywords print highlighted.
- * Each loop ends with the system glitching out and rebooting.
+ * The laptop glitches into existence once when the page loads; after that the session just loops.
  */
 export function TerminalLaptop({ uptime, className }: { uptime: string; className?: string }) {
   const lines = useMemo<Line[]>(
@@ -60,31 +57,49 @@ export function TerminalLaptop({ uptime, className }: { uptime: string; classNam
 
   const total = useMemo(() => lines.reduce((sum, line) => sum + ticksFor(line), 0), [lines]);
   const [tick, setTick] = useState(0);
+  // While true the laptop is glitching in; `frame` only exists to redraw the noise
+  const [intro, setIntro] = useState(true);
+  const [, setFrame] = useState(0);
+  // Noise is random, so it only starts once the page is running in the browser
+  const [noisy, setNoisy] = useState(false);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setIntro(false);
       setTick(total);
       return;
     }
-    const interval = setInterval(() => setTick((t) => (t >= total + HOLD + GLITCH + OFF ? 0 : t + 1)), TICK_MS);
-    return () => clearInterval(interval);
+    setNoisy(true);
+    const noise = setInterval(() => setFrame((f) => f + 1), 70);
+    const done = setTimeout(() => {
+      clearInterval(noise);
+      setIntro(false);
+    }, INTRO_MS);
+    return () => {
+      clearInterval(noise);
+      clearTimeout(done);
+    };
   }, [total]);
 
-  const glitchStart = total + HOLD;
-  const glitching = tick > glitchStart && tick <= glitchStart + GLITCH;
-  const off = tick > glitchStart + GLITCH;
-  const booting = tick > 0 && tick <= BOOT;
-  // 0 → 1 as the infection spreads
-  const damage = glitching ? (tick - glitchStart) / GLITCH : 0;
+  useEffect(() => {
+    if (intro) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const interval = setInterval(() => setTick((t) => (t >= total + HOLD ? 0 : t + 1)), TICK_MS);
+    return () => clearInterval(interval);
+  }, [intro, total]);
+
+  // During the intro the whole session is on screen, corrupted; it clears and types out afterwards
+  const damage = intro && noisy ? 0.8 : 0;
+  const shown = intro ? total : tick;
   const garble = (text: string) => (damage ? corrupt(text, damage * 0.7) : text);
 
   // Walk the script, showing as much of each line as the clock has reached
   const rows: React.ReactNode[] = [];
   let offset = 0;
   let typing = false;
-  for (let i = 0; i < lines.length && tick > offset; i++) {
+  for (let i = 0; i < lines.length && shown > offset; i++) {
     const line = lines[i];
-    const local = tick - offset;
+    const local = shown - offset;
 
     if ("cmd" in line) {
       typing = local <= line.cmd.length;
@@ -119,7 +134,7 @@ export function TerminalLaptop({ uptime, className }: { uptime: string; classNam
 
   return (
     <div className={className} aria-hidden>
-      <div className={off ? "laptop-off" : glitching ? "laptop-glitch" : booting ? "laptop-boot" : undefined}>
+      <div className={intro ? "laptop-glitch" : undefined}>
         {/* Lid + screen */}
         <div className="mx-[4%] rounded-t-xl border border-b-0 border-neutral-700 bg-[#0A0A0A] p-1.5 sm:p-2">
           <div className="relative flex aspect-[16/10] flex-col overflow-hidden rounded-md border border-neutral-800 bg-black">
@@ -130,10 +145,10 @@ export function TerminalLaptop({ uptime, className }: { uptime: string; classNam
               <span className="ml-2 font-mono text-[10px] text-neutral-600">isuru — bash</span>
             </div>
 
-            {/* Flashing fault banner once the damage is well under way */}
-            {damage > 0.35 && tick % 6 < 4 && (
+            {/* Shown while the laptop glitches in */}
+            {intro && noisy && (
               <p className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap bg-accent px-3 py-1.5 font-display text-sm font-black uppercase tracking-[0.12em] text-black sm:text-lg">
-                {corrupt("System failure", damage * 0.25)}
+                {corrupt("Booting", 0.2)}
               </p>
             )}
 

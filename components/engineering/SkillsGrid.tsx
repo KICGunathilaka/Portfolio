@@ -145,10 +145,7 @@ export function SkillsGrid() {
               {inView ? <ScrambleText text="Skills" duration={600} /> : <span className="invisible">Skills</span>}
             </h2>
           </div>
-          <p className="max-w-md pb-2 font-mono text-sm leading-relaxed text-neutral-400">
-            Everything wired to one board. Signals run to each skill in turn
-            <span className="hidden lg:inline">; hover any label to trace it yourself</span>.
-          </p>
+          <p className="hidden pb-2 font-mono text-sm text-neutral-400 lg:block">Hover a skill to trace it.</p>
         </div>
 
         {/* Wide screens: the circuit board */}

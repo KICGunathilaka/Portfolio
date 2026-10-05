@@ -16,7 +16,7 @@ export const PROJECTS: Project[] = [
     org: "BloomTech",
     field: "DevOps",
     summary:
-      "The complete CI/CD pipeline for the BloomAudit application, built end to end, together with the Linux hosting it runs on.",
+      "End-to-end CI/CD pipeline and Linux hosting.",
     stack: ["Jenkins", "Docker", "Ansible", "AWS", "Nginx", "Cloudflare", "GitHub", "Linux"],
   },
   {
@@ -25,7 +25,7 @@ export const PROJECTS: Project[] = [
     org: "BloomTech",
     field: "AI",
     summary:
-      "Retrieval-augmented generation systems and chatbots that put large language models to work inside real applications.",
+      "RAG systems and chatbots built on large language models.",
     stack: ["RAG", "LLaMA", "Mistral", "LLaVA", "Ollama"],
   },
   {
@@ -33,7 +33,7 @@ export const PROJECTS: Project[] = [
     name: "LLM Fine-Tuning",
     org: "BloomTech",
     field: "AI",
-    summary: "Fine-tuning and training large language models, then integrating them into applications.",
+    summary: "Fine-tuning and integrating large language models.",
     stack: ["LLaMA", "Ollama", "Unsloth", "Hugging Face"],
   },
   {
@@ -42,7 +42,7 @@ export const PROJECTS: Project[] = [
     org: "BloomTech",
     field: "Backend",
     summary:
-      "Custom backend services that connect applications to their databases and to external services, including Element (Matrix) messaging. Deployed and hosted with Docker, Nginx, Cloudflare and Railway.",
+      "Backend services, databases and Element (Matrix) messaging.",
     stack: ["PostgreSQL", "Prisma", "Element (Matrix)", "Docker", "Nginx", "Railway"],
   },
   {
@@ -51,7 +51,7 @@ export const PROJECTS: Project[] = [
     org: "IEEE research",
     field: "Deep learning",
     summary:
-      "Deep learning and computer vision research that identifies diseased and healthy guppy fish for the ornamental fish export industry. Published as an IEEE conference paper.",
+      "Deep learning that tells healthy guppy fish from diseased. Published by IEEE.",
     stack: ["Python", "YOLO", "OpenCV", "TensorFlow", "NumPy"],
     link: { label: "Read on IEEE Xplore", href: "https://ieeexplore.ieee.org/document/10963195" },
   },
@@ -61,7 +61,7 @@ export const PROJECTS: Project[] = [
     org: "Hayleys Advantis",
     field: "Web",
     summary:
-      "An industrial project: a warehouse management solution designed and developed to streamline operations and improve task management.",
+      "Warehouse management system for smoother operations.",
     stack: ["HTML", "CSS", "JavaScript", "PHP", "MySQL"],
   },
   {
@@ -70,7 +70,7 @@ export const PROJECTS: Project[] = [
     org: "OREL Corporation",
     field: "IoT",
     summary:
-      "IoT and digital twin technology to automate assembly-line production and raise throughput: LabVIEW applications, integrated and programmed sensors, and a link to a Python server.",
+      "IoT and digital twin automation for an assembly line.",
     stack: ["LabVIEW", "IoT sensors", "Python", "Digital twin"],
   },
 ];

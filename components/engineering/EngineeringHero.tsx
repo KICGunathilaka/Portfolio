@@ -73,13 +73,13 @@ export function EngineeringHero() {
                 <span className="block text-neutral-500">Sri Lanka</span>
               </p>
 
-              {/* Phones: GitHub profile, at the far end of the row */}
+              {/* GitHub profile: far end of the row on phones, beside the label on wide screens */}
               <a
                 href={GITHUB_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Isuru's GitHub profile"
-                className="ml-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-neutral-700 text-neutral-100 transition-colors hover:border-accent hover:text-white lg:hidden"
+                className="ml-auto flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-neutral-700 text-neutral-100 transition-colors hover:border-accent hover:text-white lg:ml-2"
               >
                 <svg viewBox="0 0 24 24" className="h-6 w-6" fill="currentColor" aria-hidden>
                   <path d={siGithub.path} />
@@ -107,9 +107,9 @@ export function EngineeringHero() {
           {/* Laptop running a terminal session of the same facts */}
           <motion.div
             className="lg:col-span-5"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.8, ease: EASE }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.15, duration: 0.1 }}
           >
             <TerminalLaptop uptime={experience()} />
           </motion.div>
@@ -124,9 +124,7 @@ export function EngineeringHero() {
         >
           <div className="lg:col-span-5">
             <p className="max-w-xl font-mono text-sm leading-relaxed text-neutral-400">
-              I&apos;m a systems engineer drawn to the place where DevOps and AI meet. At BloomTech I built the
-              complete CI/CD pipeline for the BloomAudit application, and I work on RAG systems and LLM
-              fine-tuning. My deep learning research on guppy fish health classification is published by IEEE.
+              Systems engineer working where DevOps and AI meet.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3 font-mono text-xs sm:text-sm">
@@ -166,7 +164,6 @@ export function EngineeringHero() {
                 </span>
                 <ArrowUpRight className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" strokeWidth={1.5} />
               </a>
-              <span className="block text-neutral-500">IEEE Xplore</span>
             </SpecRow>
             <SpecRow label="Internships" last>
               OREL Corporation

@@ -89,9 +89,6 @@ export function EngContact() {
           <h2 className="mt-5 font-display font-black uppercase leading-[0.9] text-[13vw] lg:text-[min(7.3vw,7.5rem)]">
             {inView ? <ScrambleText text="Contact" duration={600} /> : <span className="invisible">Contact</span>}
           </h2>
-          <p className="mt-6 max-w-lg font-mono text-sm leading-relaxed text-neutral-400">
-            If you want to talk about DevOps, AI or systems work, email is the fastest way to reach me.
-          </p>
 
           <motion.dl
             className="mt-10 max-w-2xl font-mono text-xs"

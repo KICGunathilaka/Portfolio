@@ -31,9 +31,7 @@ export function ExperienceTimeline() {
             </h2>
           </div>
           <p className="max-w-md pb-2 font-mono text-sm leading-relaxed text-neutral-400">
-            My work history as a commit log: every role is a branch, and everything I did there is a commit on
-            it. <span className="hidden lg:inline">Hover</span>
-            <span className="lg:hidden">Tap</span> a commit to read it.
+            Roles as branches, work as commits.
           </p>
         </div>
 
