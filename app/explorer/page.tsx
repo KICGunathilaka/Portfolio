@@ -6,6 +6,7 @@ import { FrameReels } from "@/components/explorer/FrameReels";
 import { ScrollMarquee } from "@/components/explorer/ScrollMarquee";
 import { SlantedSlices } from "@/components/explorer/SlantedSlices";
 import { ExplorerOutro } from "@/components/explorer/ExplorerOutro";
+import { ScrollCompass } from "@/components/explorer/ScrollCompass";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -18,6 +19,7 @@ export default function ExplorerPage() {
     <div className="min-h-screen overflow-x-clip bg-forest text-bone">
       <GlassNav />
       <ScrollProgress color="#CBEA5C" />
+      <ScrollCompass />
       <ExplorerHero />
       <TrailChapters />
       <ScrollMarquee words={["Hiking", "Camping", "Waterfalls", "Ridges"]} />

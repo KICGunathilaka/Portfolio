@@ -1,10 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useScroll, useSpring, useTransform, useVelocity } from "framer-motion";
 import Image from "next/image";
 import { ArrowLeft, ArrowRight, X } from "lucide-react";
 import { EXPLORER_PHOTOS, EXPLORER_PHOTO_DIR } from "@/lib/data/explorerPhotos";
+import { RiseText } from "./RiseText";
 
 // Every photograph, dealt across three reels
 const REELS = [0, 1, 2].map((reel) =>
@@ -43,6 +44,13 @@ export function FrameReels() {
     };
   }, [open, step]);
 
+  // The reels lean into the direction of scrolling, and settle when it stops
+  const { scrollY } = useScroll();
+  const lean = useSpring(useTransform(useVelocity(scrollY), [-2500, 0, 2500], [7, 0, -7]), {
+    damping: 30,
+    stiffness: 200,
+  });
+
   const photo = open === null ? null : EXPLORER_PHOTOS[open];
 
   return (
@@ -54,7 +62,7 @@ export function FrameReels() {
             Photographs
           </p>
           <h2 className="mt-6 text-[19vw] font-black uppercase leading-[0.82] tracking-[-0.01em] [font-stretch:62%] lg:text-[min(13vw,13.5rem)]">
-            <span className="text-lime">{TOTAL}</span> frames.
+            <RiseText text={String(TOTAL)} className="text-lime" /> <RiseText text="frames." delay={0.1} />
           </h2>
         </div>
         <p className="max-w-sm text-base leading-relaxed text-bone/70 lg:pb-4">
@@ -64,7 +72,7 @@ export function FrameReels() {
         </p>
       </div>
 
-      <div className="flex flex-col gap-1.5 pb-24 sm:gap-2 lg:pb-32">
+      <motion.div className="-mx-[5vw] flex flex-col gap-1.5 pb-24 sm:gap-2 lg:pb-32" style={{ skewX: lean }}>
         {REELS.map((reel, i) => (
           <div key={i} className="group overflow-hidden">
             <div
@@ -98,7 +106,7 @@ export function FrameReels() {
             </div>
           </div>
         ))}
-      </div>
+      </motion.div>
 
       {/* Full-screen viewer */}
       <AnimatePresence>

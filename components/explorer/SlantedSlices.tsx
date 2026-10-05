@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useInView } from "framer-motion";
 import Image from "next/image";
+import { RiseText } from "./RiseText";
 
 const DIR = "/images/explorer/";
 const SLICES = [
@@ -39,7 +40,7 @@ export function SlantedSlices() {
     <section id="cuts" ref={ref} className="overflow-hidden bg-forest py-20 text-bone lg:py-28">
       <div className="mx-auto flex max-w-[1500px] items-end justify-between gap-6 px-5 pb-10 sm:px-10">
         <h2 className="text-[15vw] font-black uppercase leading-[0.82] tracking-[-0.01em] [font-stretch:62%] lg:text-[min(9vw,9.5rem)]">
-          Seven <span className="text-lime">cuts.</span>
+          <RiseText text="Seven" /> <RiseText text="cuts." className="text-lime" delay={0.15} />
         </h2>
         <p className="pb-2 text-xs font-semibold uppercase tracking-[0.14em] text-bone/60">
           <span className="text-lime">{pad(active + 1)}</span> / {pad(SLICES.length)}

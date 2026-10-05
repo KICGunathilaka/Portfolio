@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import Image from "next/image";
 import { RidgeLine } from "./RidgeLine";
+import { RiseText } from "./RiseText";
 
 const DIR = "/images/explorer/";
 
@@ -128,9 +129,9 @@ export function TrailChapters() {
             On the trail
           </p>
           <h2 className="mt-6 text-[15vw] font-black uppercase leading-[0.82] tracking-[-0.01em] [font-stretch:62%] lg:text-[min(10vw,10.5rem)]">
-            What I go
+            <RiseText text="What I go" />
             <br />
-            <span className="text-lime">looking for.</span>
+            <RiseText text="looking for." className="text-lime" delay={0.2} />
           </h2>
         </div>
         <p className="max-w-sm text-base leading-relaxed text-bone/70 lg:pb-3">

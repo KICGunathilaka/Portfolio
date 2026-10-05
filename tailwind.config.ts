@@ -48,6 +48,7 @@ const config: Config = {
         "drift": "drift 26s ease-in-out infinite alternate",
         "blink": "blink 1s steps(1) infinite",
         "wall-up": "wallUp 60s linear infinite",
+        "hint": "hint 1.8s cubic-bezier(0.6, 0, 0.3, 1) infinite",
         "wall-down": "wallDown 60s linear infinite",
         "reel-left": "reelLeft 140s linear infinite",
         "reel-right": "reelRight 140s linear infinite",
@@ -58,6 +59,11 @@ const config: Config = {
           to: { transform: "scale(1.08) translate3d(-1.5%, -1%, 0)" },
         },
         // Each stack holds its photos twice, so moving by half its height loops seamlessly
+        hint: {
+          "0%": { transform: "translateY(0)", opacity: "0" },
+          "25%": { opacity: "1" },
+          "100%": { transform: "translateY(36px)", opacity: "0" },
+        },
         wallUp: {
           from: { transform: "translateY(0)" },
           to: { transform: "translateY(-50%)" },

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { PhotoWall } from "./PhotoWall";
+import { RiseText } from "./RiseText";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -92,7 +93,7 @@ export function ExplorerHero() {
           >
             <div>
               <p className="text-[9vw] font-black uppercase leading-[0.85] text-lime [font-stretch:62%] sm:text-6xl">
-                On foot.
+                <RiseText text="On foot." delay={0.9} />
               </p>
               <p className="mt-4 max-w-sm text-sm leading-relaxed text-bone/70 sm:text-base">
                 The other half of the week: trails, ridges and waterfalls in the highlands, with a tent on my
@@ -101,7 +102,9 @@ export function ExplorerHero() {
             </div>
             <p className="flex shrink-0 flex-col items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-bone/60">
               Scroll
-              <span className="block h-12 w-px bg-bone/40" />
+              <span className="relative block h-12 w-px bg-bone/30">
+                <span className="absolute -left-px top-0 h-3 w-[3px] bg-lime motion-safe:animate-hint" />
+              </span>
             </p>
           </motion.div>
         </motion.div>
