@@ -3,6 +3,8 @@ import { ScrollProgress } from "@/components/shared/ScrollProgress";
 import { ExplorerHero } from "@/components/explorer/ExplorerHero";
 import { TrailChapters } from "@/components/explorer/TrailChapters";
 import { FrameReels } from "@/components/explorer/FrameReels";
+import { ScrollMarquee } from "@/components/explorer/ScrollMarquee";
+import { ShapeDrift } from "@/components/explorer/ShapeDrift";
 import { ExplorerOutro } from "@/components/explorer/ExplorerOutro";
 import type { Metadata } from "next";
 
@@ -13,11 +15,14 @@ export const metadata: Metadata = {
 
 export default function ExplorerPage() {
   return (
-    <div className="min-h-screen bg-forest text-bone">
+    <div className="min-h-screen overflow-x-clip bg-forest text-bone">
       <GlassNav />
       <ScrollProgress color="#CBEA5C" />
       <ExplorerHero />
       <TrailChapters />
+      <ScrollMarquee words={["Hiking", "Camping", "Waterfalls", "Ridges"]} />
+      <ShapeDrift />
+      <ScrollMarquee words={["Mist", "Trails", "Tents", "Summits"]} direction={-1} />
       <FrameReels />
       <ExplorerOutro />
 

@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import Image from "next/image";
+import { RidgeLine } from "./RidgeLine";
 
 const DIR = "/images/explorer/";
 
@@ -63,6 +64,8 @@ function Scene({ index, progress }: { index: number; progress: MotionValue<numbe
   );
   // Each photograph eases back slightly while it is on screen
   const scale = useTransform(progress, [opensAt, (index + 1) / COUNT], [1.16, 1]);
+  // The title climbs into its bar as the scene finishes opening
+  const titleY = useTransform(progress, [(opensAt + openBy) / 2, openBy + 0.03], ["110%", "0%"]);
 
   return (
     <motion.div
@@ -98,7 +101,11 @@ function Scene({ index, progress }: { index: number; progress: MotionValue<numbe
             <span className="text-lime">{pad(index + 1)}</span> / {pad(COUNT)}
           </p>
           <h3 className="mt-2 text-[17vw] font-black uppercase leading-[0.8] tracking-[-0.01em] text-bone [font-stretch:62%] lg:text-[min(11vw,11rem)]">
-            {chapter.word}
+            <span className="block overflow-hidden pt-[0.06em]">
+              <motion.span className="block" style={{ y: titleY }}>
+                {chapter.word}
+              </motion.span>
+            </span>
           </h3>
         </div>
         <p className="max-w-xs text-sm leading-relaxed text-bone/70 lg:pb-2 lg:text-right lg:text-base">{chapter.line}</p>
@@ -131,6 +138,8 @@ export function TrailChapters() {
           the last.
         </p>
       </div>
+
+      <RidgeLine />
 
       {/* The scenes: pinned to the screen while the page scrolls through them */}
       <div ref={trackRef} className="relative" style={{ height: `${COUNT * 110}vh` }}>
